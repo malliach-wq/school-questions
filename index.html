@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>School Questions</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
@@ -158,6 +159,11 @@
     .login-title{font-size:1.2rem;font-weight:600;margin-bottom:6px;text-align:center}
     .login-sub{font-size:.83rem;color:var(--muted);margin-bottom:24px;text-align:center}
 
+    /* PDF mode toggle */
+    .pdf-mode-btn{background:#fff;border:1.5px solid var(--border);padding:8px 18px;border-radius:8px;font-size:.85rem;font-weight:500;cursor:pointer;font-family:inherit;color:#555;transition:all .15s}
+    .pdf-mode-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+    .pdf-mode-btn:not(.active):hover{border-color:#ccc;background:#fafafa}
+
     @media(max-width:560px){
       .main,.quiz-wrap,.res-wrap,.admin-wrap{padding-left:16px;padding-right:16px}
       .topbar{padding:0 16px}
@@ -296,6 +302,71 @@
       <div class="msg" id="uploadMsg"></div>
     </div>
 
+    <!-- PDF to CSV converter -->
+    <div class="admin-section">
+      <div class="admin-section-title">Convert PDF to Quiz</div>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px">Upload a PDF (or two separate PDFs for questions + answers) and Claude will extract the questions and convert them to a quiz automatically.</p>
+
+      <!-- Mode toggle -->
+      <div style="display:flex;gap:8px;margin-bottom:20px">
+        <button class="pdf-mode-btn active" id="modeSingle" onclick="setPdfMode('single')">Single PDF</button>
+        <button class="pdf-mode-btn" id="modeTwo" onclick="setPdfMode('two')">Two PDFs</button>
+      </div>
+
+      <!-- Single PDF -->
+      <div id="pdfSingleZone">
+        <div class="form-group">
+          <label class="form-label">PDF with questions &amp; answers</label>
+          <div class="dropzone" id="dzPdfSingle">
+            <input type="file" id="pdfSingleFile" accept=".pdf" onchange="handlePdfFile('single', event)"/>
+            <div class="dz-icon">📄</div>
+            <div class="dz-text" id="dzSingleText">Drop PDF here or click to browse</div>
+            <div class="dz-hint">Questions and answers can be in any format</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two PDFs -->
+      <div id="pdfTwoZone" style="display:none">
+        <div class="form-group">
+          <label class="form-label">PDF with questions</label>
+          <div class="dropzone" id="dzPdfQ">
+            <input type="file" id="pdfQFile" accept=".pdf" onchange="handlePdfFile('questions', event)"/>
+            <div class="dz-icon">❓</div>
+            <div class="dz-text" id="dzQText">Drop questions PDF here</div>
+            <div class="dz-hint">Contains the questions only</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">PDF with answers</label>
+          <div class="dropzone" id="dzPdfA">
+            <input type="file" id="pdfAFile" accept=".pdf" onchange="handlePdfFile('answers', event)"/>
+            <div class="dz-icon">✅</div>
+            <div class="dz-text" id="dzAText">Drop answers PDF here</div>
+            <div class="dz-hint">Contains the answer key</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btnConvert" onclick="convertPdfs()" disabled style="margin-top:4px">Convert to CSV</button>
+      <div class="msg" id="pdfMsg"></div>
+
+      <!-- CSV result -->
+      <div id="pdfResultBox" style="display:none;margin-top:20px">
+        <div class="form-group">
+          <label class="form-label" style="display:flex;justify-content:space-between">
+            <span>Generated CSV — review &amp; edit before using</span>
+            <span id="pdfQCount" style="font-weight:400;color:var(--muted)"></span>
+          </label>
+          <textarea class="form-input" id="pdfCsvOutput" rows="10" style="font-family:monospace;font-size:.78rem;resize:vertical"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn-primary" onclick="usePdfCsv()">⬆ Use as Quiz Upload</button>
+          <button class="btn-outline" onclick="downloadPdfCsv()">⬇ Download CSV</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Quiz library -->
     <div class="admin-section">
       <div class="admin-section-title">Quiz Library</div>
@@ -319,6 +390,11 @@
         <label class="form-label">Personal Access Token (PAT)</label>
         <input class="form-input" type="password" id="ghToken" placeholder="github_pat_…"/>
         <div class="form-hint">Token needs <strong>repo</strong> scope. Stored only in this browser.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Anthropic API Key</label>
+        <input class="form-input" type="password" id="anthropicKey" placeholder="sk-ant-…"/>
+        <div class="form-hint">Used for PDF-to-quiz conversion. Stored only in this browser. Get one at <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--accent)">console.anthropic.com</a>.</div>
       </div>
       <button class="btn-primary" onclick="saveGhSettings()">Save Settings</button>
       <div class="msg" id="ghMsg"></div>
@@ -636,15 +712,17 @@ function showAdminPanel() {
 }
 
 function loadGhSettings() {
-  el('ghOwner').value = localStorage.getItem('sq_gh_owner')||'';
-  el('ghRepo').value  = localStorage.getItem('sq_gh_repo')||'';
-  el('ghToken').value = localStorage.getItem('sq_gh_token')||'';
+  el('ghOwner').value      = localStorage.getItem('sq_gh_owner')||'';
+  el('ghRepo').value       = localStorage.getItem('sq_gh_repo')||'';
+  el('ghToken').value      = localStorage.getItem('sq_gh_token')||'';
+  el('anthropicKey').value = localStorage.getItem('sq_anthropic_key')||'';
 }
 
 function saveGhSettings() {
-  localStorage.setItem('sq_gh_owner', el('ghOwner').value.trim());
-  localStorage.setItem('sq_gh_repo',  el('ghRepo').value.trim());
-  localStorage.setItem('sq_gh_token', el('ghToken').value.trim());
+  localStorage.setItem('sq_gh_owner',      el('ghOwner').value.trim());
+  localStorage.setItem('sq_gh_repo',       el('ghRepo').value.trim());
+  localStorage.setItem('sq_gh_token',      el('ghToken').value.trim());
+  localStorage.setItem('sq_anthropic_key', el('anthropicKey').value.trim());
   showMsg('ghMsg','Settings saved','ok');
 }
 
@@ -758,123 +836,4 @@ async function commitQuiz() {
   const subject = el('uploadSubject').value;
   if (!name) { showMsg('uploadMsg','Enter a quiz name','err'); return; }
 
-  const owner = localStorage.getItem('sq_gh_owner');
-  const repo  = localStorage.getItem('sq_gh_repo');
-  const token = localStorage.getItem('sq_gh_token');
-  if (!owner||!repo||!token) {
-    showMsg('uploadMsg','Please fill in GitHub Settings below first','err');
-    el('ghOwner').scrollIntoView({behavior:'smooth'});
-    return;
-  }
-
-  el('btnCommit').disabled = true;
-  el('btnCommit').textContent = 'Uploading…';
-  showMsg('uploadMsg','Committing to GitHub…','info');
-
-  // Build quiz id from name
-  const id = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-  const icon = getIcon(subject);
-
-  const quizData = { name, subject, icon, questions: pendingQuiz.questions };
-  const quizPath = `quizzes/${id}.json`;
-
-  try {
-    // 1. Commit quiz JSON file
-    await ghPut(owner, repo, token, quizPath,
-      JSON.stringify(quizData, null, 2),
-      `Add quiz: ${name}`);
-
-    // 2. Fetch and update index.json
-    const idxRes = await ghGet(owner, repo, token, 'quizzes/index.json');
-    let idx = [];
-    if (idxRes.ok) {
-      const idxData = await idxRes.json();
-      idx = JSON.parse(atob(idxData.content.replace(/\n/g,'')));
-      // Remove existing entry with same id
-      idx = idx.filter(q => q.id !== id);
-    }
-    idx.push({ id, name, subject, icon, count: pendingQuiz.questions.length });
-    await ghPut(owner, repo, token, 'quizzes/index.json',
-      JSON.stringify(idx, null, 2),
-      `Update index: add ${name}`);
-
-    showMsg('uploadMsg', `✅ "${name}" uploaded! Vercel will deploy it in ~30 seconds.`, 'ok');
-    el('previewBox').style.display = 'none';
-    el('uploadName').value = '';
-    el('csvFile').value = '';
-    pendingQuiz = null;
-    setTimeout(loadAdminQuizList, 2000);
-  } catch(e) {
-    showMsg('uploadMsg', `Upload failed: ${e.message}`, 'err');
-  }
-
-  el('btnCommit').disabled = false;
-  el('btnCommit').textContent = '⬆ Upload to Library';
-}
-
-async function deleteQuiz(id, name) {
-  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
-  const owner = localStorage.getItem('sq_gh_owner');
-  const repo  = localStorage.getItem('sq_gh_repo');
-  const token = localStorage.getItem('sq_gh_token');
-  if (!owner||!repo||!token) { alert('GitHub settings not configured'); return; }
-
-  try {
-    // Delete file
-    const fileRes = await ghGet(owner, repo, token, `quizzes/${id}.json`);
-    if (fileRes.ok) {
-      const fd = await fileRes.json();
-      await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/quizzes/${id}.json`, {
-        method:'DELETE',
-        headers:ghHeaders(token),
-        body:JSON.stringify({ message:`Delete quiz: ${name}`, sha:fd.sha })
-      });
-    }
-
-    // Update index
-    const idxRes = await ghGet(owner, repo, token, 'quizzes/index.json');
-    if (idxRes.ok) {
-      const idxData = await idxRes.json();
-      let idx = JSON.parse(atob(idxData.content.replace(/\n/g,'')));
-      idx = idx.filter(q => q.id !== id);
-      await ghPut(owner, repo, token, 'quizzes/index.json',
-        JSON.stringify(idx,null,2), `Update index: remove ${name}`, idxData.sha);
-    }
-    loadAdminQuizList();
-  } catch(e) {
-    alert('Delete failed: '+e.message);
-  }
-}
-
-// GitHub API helpers
-function ghHeaders(token) {
-  return { 'Authorization':'Bearer '+token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' };
-}
-
-async function ghGet(owner, repo, token, path) {
-  return fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-    headers: ghHeaders(token)
-  });
-}
-
-async function ghPut(owner, repo, token, path, content, message, sha) {
-  const body = { message, content: btoa(unescape(encodeURIComponent(content))) };
-  if (!sha) {
-    // Try to get existing SHA
-    const r = await ghGet(owner, repo, token, path);
-    if (r.ok) { const d = await r.json(); sha = d.sha; }
-  }
-  if (sha) body.sha = sha;
-  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-    method:'PUT', headers:ghHeaders(token), body:JSON.stringify(body)
-  });
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.message||res.status);
-  }
-  return res;
-}
-
-// ═══════════════════════════════════════════════
-// UTILS
-// ═══════════════════════════════�
+  const owner = localStorage.getItem('sq_gh_
