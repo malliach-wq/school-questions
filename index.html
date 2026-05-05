@@ -95,9 +95,11 @@
     .bd-badge{font-size:.72rem;font-weight:600;padding:3px 8px;border-radius:20px;white-space:nowrap}
     .bd-badge.ok{background:var(--green-l);color:var(--green)}.bd-badge.bad{background:var(--red-l);color:var(--red)}
     .res-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-    .btn-retry,.btn-home{padding:12px 26px;border-radius:8px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s,transform .1s}
+    .btn-retry,.btn-home,.btn-section{padding:12px 26px;border-radius:8px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s,transform .1s}
     .btn-retry{background:var(--accent);color:#fff;border:none}
     .btn-retry:hover{background:#5e3d56;transform:translateY(-1px)}
+    .btn-section{background:var(--accent-l);color:var(--accent);border:1px solid var(--accent-l)}
+    .btn-section:hover{background:#e8ddf0;border-color:#e8ddf0;transform:translateY(-1px)}
     .btn-home{background:#fff;color:#555;border:1px solid var(--border)}
     .btn-home:hover{border-color:#ccc;background:#fafafa;transform:translateY(-1px)}
 
@@ -200,7 +202,7 @@
     </div>
     <div class="answers" id="answersGrid"></div>
     <div class="feedback" id="feedback"></div>
-    <div class="quiz-foot">
+    <div class="quiz-foot" style="display:none">
       <button class="btn-next" id="btnNext" onclick="nextQ()">Next →</button>
     </div>
   </div>
@@ -222,6 +224,7 @@
     <div class="breakdown" id="breakdown"></div>
     <div class="res-actions">
       <button class="btn-retry" onclick="retryTest()">Try Again</button>
+      <button class="btn-section" id="btnSubject" onclick="goSubject()">Subject Tests</button>
       <button class="btn-home" onclick="goHome()">All Tests</button>
     </div>
   </div>
@@ -454,19 +457,30 @@ async function fetchIndex() {
   } catch { return []; }
 }
 
-async function loadHome() {
+async function loadHome(filterSubject) {
   el('homeContent').innerHTML = '<p class="loading">Loading quizzes…</p>';
+
+  // Update heading when filtered
+  el('homeContent').closest('.main').querySelector('.page-h').textContent =
+    filterSubject ? filterSubject + ' Tests' : 'Quiz Library';
+  el('homeContent').closest('.main').querySelector('.page-sub').textContent =
+    filterSubject ? 'Choose a test to begin' : 'Choose a test to begin';
+
   const remote = await fetchIndex();
   quizIndex = remote.map(q => ({...q, builtin: true}));
 
-  if (!quizIndex.length) {
+  let visible = filterSubject
+    ? quizIndex.filter(q => q.subject === filterSubject)
+    : quizIndex;
+
+  if (!visible.length) {
     el('homeContent').innerHTML = '<p class="loading">No quizzes found. Ask an admin to upload some!</p>';
     return;
   }
 
   // Group by subject
   const groups = {};
-  quizIndex.forEach(q => {
+  visible.forEach(q => {
     if (!groups[q.subject]) groups[q.subject] = [];
     groups[q.subject].push(q);
   });
@@ -547,7 +561,9 @@ function pick(idx) {
   el('feedback').innerHTML = right
     ? '<span class="fb-icon">✅</span><span class="fb-text ok">Correct! Well done.</span>'
     : `<span class="fb-icon">❌</span><span class="fb-text bad">Correct answer: ${q.o[correct]}</span>`;
-  el('btnNext').classList.add('visible');
+
+  // Auto-advance after a short pause
+  setTimeout(() => nextQ(), 1100);
 }
 
 function nextQ() {
@@ -595,6 +611,16 @@ function showResults() {
       <span class="bd-q">${i+1}. ${q.q}</span>
       <span class="bd-badge ${results[i]?'ok':'bad'}">${results[i]?'✓ Correct':'✗ Wrong'}</span>
     </div>`).join('');
+
+  // Update subject button label
+  el('btnSubject').textContent = (currentQuiz.subject || 'Subject') + ' Tests';
+}
+
+function goSubject() {
+  const subj = currentQuiz ? currentQuiz.subject : null;
+  showPage('pageHome');
+  currentQuiz = null;
+  loadHome(subj);
 }
 
 function getBest(id) { return parseInt(localStorage.getItem('sq_best_'+id)||'-1'); }
@@ -851,32 +877,4 @@ async function ghPut(owner, repo, token, path, content, message, sha) {
 
 // ═══════════════════════════════════════════════
 // UTILS
-// ═══════════════════════════════════════════════
-function getIcon(subject) {
-  const key = subject.toLowerCase();
-  return SUBJECT_ICONS[key] || SUBJECT_ICONS.default;
-}
-
-function showMsg(id, text, type) {
-  const el2 = el(id);
-  el2.innerHTML = text;
-  el2.className = 'msg' + (type ? ' '+type+' visible' : '');
-}
-
-function downloadTemplate() {
-  const csv = 'Question,Option A,Option B,Option C,Option D,Correct (A/B/C/D)\n' +
-    'What is the capital of France?,Paris,London,Berlin,Madrid,A\n' +
-    'How many sides does a triangle have?,3,4,5,6,A\n';
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  a.download = 'quiz-template.csv';
-  a.click();
-}
-
-// ═══════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════
-loadHome();
-</script>
-</body>
-</html>
+// ═══════════════════════════════�
