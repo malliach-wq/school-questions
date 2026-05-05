@@ -103,6 +103,10 @@
     .btn-section:hover{background:#e8ddf0;border-color:#e8ddf0;transform:translateY(-1px)}
     .btn-home{background:#fff;color:#555;border:1px solid var(--border)}
     .btn-home:hover{border-color:#ccc;background:#fafafa;transform:translateY(-1px)}
+    /* PDF mode toggle */
+    .pdf-mode-btn{background:#fff;border:1.5px solid var(--border);padding:8px 18px;border-radius:8px;font-size:.85rem;font-weight:500;cursor:pointer;font-family:inherit;color:#555;transition:all .15s}
+    .pdf-mode-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+    .pdf-mode-btn:not(.active):hover{border-color:#ccc;background:#fafafa}
 
     /* ── ADMIN ── */
     .admin-wrap{max-width:680px;margin:0 auto;padding:48px 32px 80px}
@@ -158,11 +162,6 @@
     .login-wrap{max-width:360px;margin:80px auto;padding:32px;border:1px solid var(--border);border-radius:16px}
     .login-title{font-size:1.2rem;font-weight:600;margin-bottom:6px;text-align:center}
     .login-sub{font-size:.83rem;color:var(--muted);margin-bottom:24px;text-align:center}
-
-    /* PDF mode toggle */
-    .pdf-mode-btn{background:#fff;border:1.5px solid var(--border);padding:8px 18px;border-radius:8px;font-size:.85rem;font-weight:500;cursor:pointer;font-family:inherit;color:#555;transition:all .15s}
-    .pdf-mode-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
-    .pdf-mode-btn:not(.active):hover{border-color:#ccc;background:#fafafa}
 
     @media(max-width:560px){
       .main,.quiz-wrap,.res-wrap,.admin-wrap{padding-left:16px;padding-right:16px}
@@ -306,14 +305,10 @@
     <div class="admin-section">
       <div class="admin-section-title">Convert PDF to Quiz</div>
       <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px">Upload a PDF (or two separate PDFs for questions + answers) and Claude will extract the questions and convert them to a quiz automatically.</p>
-
-      <!-- Mode toggle -->
       <div style="display:flex;gap:8px;margin-bottom:20px">
         <button class="pdf-mode-btn active" id="modeSingle" onclick="setPdfMode('single')">Single PDF</button>
         <button class="pdf-mode-btn" id="modeTwo" onclick="setPdfMode('two')">Two PDFs</button>
       </div>
-
-      <!-- Single PDF -->
       <div id="pdfSingleZone">
         <div class="form-group">
           <label class="form-label">PDF with questions &amp; answers</label>
@@ -325,8 +320,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Two PDFs -->
       <div id="pdfTwoZone" style="display:none">
         <div class="form-group">
           <label class="form-label">PDF with questions</label>
@@ -347,11 +340,8 @@
           </div>
         </div>
       </div>
-
       <button class="btn-primary" id="btnConvert" onclick="convertPdfs()" disabled style="margin-top:4px">Convert to CSV</button>
       <div class="msg" id="pdfMsg"></div>
-
-      <!-- CSV result -->
       <div id="pdfResultBox" style="display:none;margin-top:20px">
         <div class="form-group">
           <label class="form-label" style="display:flex;justify-content:space-between">
@@ -455,8 +445,8 @@ function showPage(id) {
 function el(id) { return document.getElementById(id); }
 
 function goHome() {
-  showPage('pageHome');
   currentQuiz = null;
+  showPage('pageHome');
   loadHome();
 }
 
@@ -533,21 +523,23 @@ async function fetchIndex() {
   } catch { return []; }
 }
 
+function goSubject() {
+  const subj = currentQuiz ? currentQuiz.subject : null;
+  currentQuiz = null;
+  showPage('pageHome');
+  loadHome(subj);
+}
+
 async function loadHome(filterSubject) {
   el('homeContent').innerHTML = '<p class="loading">Loading quizzes…</p>';
-
-  // Update heading when filtered
-  el('homeContent').closest('.main').querySelector('.page-h').textContent =
-    filterSubject ? filterSubject + ' Tests' : 'Quiz Library';
-  el('homeContent').closest('.main').querySelector('.page-sub').textContent =
-    filterSubject ? 'Choose a test to begin' : 'Choose a test to begin';
-
   const remote = await fetchIndex();
   quizIndex = remote.map(q => ({...q, builtin: true}));
 
-  let visible = filterSubject
-    ? quizIndex.filter(q => q.subject === filterSubject)
-    : quizIndex;
+  const visible = filterSubject ? quizIndex.filter(q => q.subject === filterSubject) : quizIndex;
+  const heading = document.querySelector('#pageHome .page-h');
+  const sub     = document.querySelector('#pageHome .page-sub');
+  if (heading) heading.textContent = filterSubject ? filterSubject + ' Tests' : 'Quiz Library';
+  if (sub) sub.textContent = 'Choose a test to begin';
 
   if (!visible.length) {
     el('homeContent').innerHTML = '<p class="loading">No quizzes found. Ask an admin to upload some!</p>';
@@ -637,7 +629,6 @@ function pick(idx) {
   el('feedback').innerHTML = right
     ? '<span class="fb-icon">✅</span><span class="fb-text ok">Correct! Well done.</span>'
     : `<span class="fb-icon">❌</span><span class="fb-text bad">Correct answer: ${q.o[correct]}</span>`;
-
   // Auto-advance after a short pause
   setTimeout(() => nextQ(), 1100);
 }
@@ -682,21 +673,13 @@ function showResults() {
     : best > 0 ? `Your best: <strong>${best}/${total}</strong>` : '';
   localStorage.setItem('sq_prev_'+currentQuiz.id, score);
 
+  el('btnSubject').textContent = (currentQuiz.subject || 'Subject') + ' Tests';
+
   el('breakdown').innerHTML = currentQuiz.questions.map((q,i) =>
     `<div class="bd-row">
       <span class="bd-q">${i+1}. ${q.q}</span>
       <span class="bd-badge ${results[i]?'ok':'bad'}">${results[i]?'✓ Correct':'✗ Wrong'}</span>
     </div>`).join('');
-
-  // Update subject button label
-  el('btnSubject').textContent = (currentQuiz.subject || 'Subject') + ' Tests';
-}
-
-function goSubject() {
-  const subj = currentQuiz ? currentQuiz.subject : null;
-  showPage('pageHome');
-  currentQuiz = null;
-  loadHome(subj);
 }
 
 function getBest(id) { return parseInt(localStorage.getItem('sq_best_'+id)||'-1'); }
@@ -836,4 +819,323 @@ async function commitQuiz() {
   const subject = el('uploadSubject').value;
   if (!name) { showMsg('uploadMsg','Enter a quiz name','err'); return; }
 
-  const owner = localStorage.getItem('sq_gh_
+  const owner = localStorage.getItem('sq_gh_owner');
+  const repo  = localStorage.getItem('sq_gh_repo');
+  const token = localStorage.getItem('sq_gh_token');
+  if (!owner||!repo||!token) {
+    showMsg('uploadMsg','Please fill in GitHub Settings below first','err');
+    el('ghOwner').scrollIntoView({behavior:'smooth'});
+    return;
+  }
+
+  el('btnCommit').disabled = true;
+  el('btnCommit').textContent = 'Uploading…';
+  showMsg('uploadMsg','Committing to GitHub…','info');
+
+  // Build quiz id from name
+  const id = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const icon = getIcon(subject);
+
+  const quizData = { name, subject, icon, questions: pendingQuiz.questions };
+  const quizPath = `quizzes/${id}.json`;
+
+  try {
+    // 1. Commit quiz JSON file
+    await ghPut(owner, repo, token, quizPath,
+      JSON.stringify(quizData, null, 2),
+      `Add quiz: ${name}`);
+
+    // 2. Fetch and update index.json
+    const idxRes = await ghGet(owner, repo, token, 'quizzes/index.json');
+    let idx = [];
+    if (idxRes.ok) {
+      const idxData = await idxRes.json();
+      idx = JSON.parse(atob(idxData.content.replace(/\n/g,'')));
+      // Remove existing entry with same id
+      idx = idx.filter(q => q.id !== id);
+    }
+    idx.push({ id, name, subject, icon, count: pendingQuiz.questions.length });
+    await ghPut(owner, repo, token, 'quizzes/index.json',
+      JSON.stringify(idx, null, 2),
+      `Update index: add ${name}`);
+
+    showMsg('uploadMsg', `✅ "${name}" uploaded! Vercel will deploy it in ~30 seconds.`, 'ok');
+    el('previewBox').style.display = 'none';
+    el('uploadName').value = '';
+    el('csvFile').value = '';
+    pendingQuiz = null;
+    setTimeout(loadAdminQuizList, 2000);
+  } catch(e) {
+    showMsg('uploadMsg', `Upload failed: ${e.message}`, 'err');
+  }
+
+  el('btnCommit').disabled = false;
+  el('btnCommit').textContent = '⬆ Upload to Library';
+}
+
+async function deleteQuiz(id, name) {
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  const owner = localStorage.getItem('sq_gh_owner');
+  const repo  = localStorage.getItem('sq_gh_repo');
+  const token = localStorage.getItem('sq_gh_token');
+  if (!owner||!repo||!token) { alert('GitHub settings not configured'); return; }
+
+  try {
+    // Delete file
+    const fileRes = await ghGet(owner, repo, token, `quizzes/${id}.json`);
+    if (fileRes.ok) {
+      const fd = await fileRes.json();
+      await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/quizzes/${id}.json`, {
+        method:'DELETE',
+        headers:ghHeaders(token),
+        body:JSON.stringify({ message:`Delete quiz: ${name}`, sha:fd.sha })
+      });
+    }
+
+    // Update index
+    const idxRes = await ghGet(owner, repo, token, 'quizzes/index.json');
+    if (idxRes.ok) {
+      const idxData = await idxRes.json();
+      let idx = JSON.parse(atob(idxData.content.replace(/\n/g,'')));
+      idx = idx.filter(q => q.id !== id);
+      await ghPut(owner, repo, token, 'quizzes/index.json',
+        JSON.stringify(idx,null,2), `Update index: remove ${name}`, idxData.sha);
+    }
+    loadAdminQuizList();
+  } catch(e) {
+    alert('Delete failed: '+e.message);
+  }
+}
+
+// GitHub API helpers
+function ghHeaders(token) {
+  return { 'Authorization':'Bearer '+token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' };
+}
+
+async function ghGet(owner, repo, token, path) {
+  return fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+    headers: ghHeaders(token)
+  });
+}
+
+async function ghPut(owner, repo, token, path, content, message, sha) {
+  const body = { message, content: btoa(unescape(encodeURIComponent(content))) };
+  if (!sha) {
+    // Try to get existing SHA
+    const r = await ghGet(owner, repo, token, path);
+    if (r.ok) { const d = await r.json(); sha = d.sha; }
+  }
+  if (sha) body.sha = sha;
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+    method:'PUT', headers:ghHeaders(token), body:JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message||res.status);
+  }
+  return res;
+}
+
+// ═══════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════
+function getIcon(subject) {
+  const key = subject.toLowerCase();
+  return SUBJECT_ICONS[key] || SUBJECT_ICONS.default;
+}
+
+function showMsg(id, text, type) {
+  const el2 = el(id);
+  el2.innerHTML = text;
+  el2.className = 'msg' + (type ? ' '+type+' visible' : '');
+}
+
+function downloadTemplate() {
+  const csv = 'Question,Option A,Option B,Option C,Option D,Correct (A/B/C/D)\n' +
+    'What is the capital of France?,Paris,London,Berlin,Madrid,A\n' +
+    'How many sides does a triangle have?,3,4,5,6,A\n';
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'quiz-template.csv';
+  a.click();
+}
+
+// ═══════════════════════════════════════════════
+// PDF → CSV CONVERTER
+// ═══════════════════════════════════════════════
+let pdfMode = 'single';
+let pdfTexts = { single: null, questions: null, answers: null };
+
+if (typeof pdfjsLib !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+function setPdfMode(mode) {
+  pdfMode = mode;
+  el('modeSingle').classList.toggle('active', mode === 'single');
+  el('modeTwo').classList.toggle('active', mode === 'two');
+  el('pdfSingleZone').style.display = mode === 'single' ? '' : 'none';
+  el('pdfTwoZone').style.display    = mode === 'two'    ? '' : 'none';
+  pdfTexts = { single: null, questions: null, answers: null };
+  el('pdfResultBox').style.display = 'none';
+  showMsg('pdfMsg','','');
+  updateConvertBtn();
+}
+
+function updateConvertBtn() {
+  const ready = pdfMode === 'single' ? !!pdfTexts.single : !!pdfTexts.questions;
+  el('btnConvert').disabled = !ready;
+}
+
+async function handlePdfFile(slot, evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  const labelMap = { single: 'dzSingleText', questions: 'dzQText', answers: 'dzAText' };
+  el(labelMap[slot]).textContent = '📄 ' + file.name + ' — extracting…';
+  showMsg('pdfMsg', 'Reading PDF…', 'info');
+  try {
+    pdfTexts[slot] = await extractPdfText(file);
+    el(labelMap[slot]).textContent = '✅ ' + file.name + ' (' + pdfTexts[slot].length.toLocaleString() + ' chars)';
+    showMsg('pdfMsg','','');
+  } catch(e) {
+    el(labelMap[slot]).textContent = '❌ Failed to read PDF';
+    showMsg('pdfMsg', 'Could not read PDF: ' + e.message, 'err');
+  }
+  updateConvertBtn();
+}
+
+async function extractPdfText(file) {
+  if (typeof pdfjsLib === 'undefined') throw new Error('PDF.js not loaded');
+  const buffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+  let text = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const lines = {};
+    content.items.forEach(function(item) {
+      const y = Math.round(item.transform[5]);
+      lines[y] = (lines[y] || '') + item.str + ' ';
+    });
+    const sorted = Object.keys(lines).sort(function(a,b){ return b-a; });
+    text += sorted.map(function(y){ return lines[y].trim(); }).filter(Boolean).join('\n') + '\n\n';
+  }
+  return text.trim();
+}
+
+async function convertPdfs() {
+  const apiKey = localStorage.getItem('sq_anthropic_key');
+  if (!apiKey) {
+    showMsg('pdfMsg', 'Please add your Anthropic API key in Settings below first', 'err');
+    el('anthropicKey').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+  el('btnConvert').disabled = true;
+  el('pdfResultBox').style.display = 'none';
+  const prompt = pdfMode === 'single'
+    ? buildSinglePrompt(pdfTexts.single)
+    : buildTwoPrompt(pdfTexts.questions, pdfTexts.answers);
+  showMsg('pdfMsg', 'Claude is extracting questions... this may take 15-30 seconds', 'info');
+  try {
+    const csv = await callClaude(prompt, apiKey);
+    const cleaned = cleanCsvOutput(csv);
+    const rowCount = cleaned.split('\n').filter(function(l){ return l.trim() && !l.toLowerCase().startsWith('question'); }).length;
+    el('pdfCsvOutput').value = cleaned;
+    el('pdfQCount').textContent = rowCount + ' question' + (rowCount !== 1 ? 's' : '') + ' found';
+    el('pdfResultBox').style.display = 'block';
+    showMsg('pdfMsg', 'Done! Review the CSV below, then click "Use as Quiz Upload".', 'ok');
+  } catch(e) {
+    showMsg('pdfMsg', 'Conversion failed: ' + e.message, 'err');
+  }
+  el('btnConvert').disabled = false;
+  updateConvertBtn();
+}
+
+function buildSinglePrompt(text) {
+  return 'You are extracting multiple choice quiz questions from a school exam PDF.\n\n' +
+    'The text below was extracted from a PDF that contains questions AND their correct answers. Extract every question and format it as a CSV.\n\n' +
+    'Return ONLY the raw CSV, no markdown, no explanation.\n\n' +
+    'CSV format (first row must be exactly this header):\n' +
+    'Question,A,B,C,D,Correct\n\n' +
+    'Rules:\n' +
+    '- One row per question\n' +
+    '- Correct column must be A, B, C, or D\n' +
+    '- Wrap fields containing commas in double quotes\n' +
+    '- Do not include question numbers in the Question field\n\n' +
+    'PDF text:\n' + text;
+}
+
+function buildTwoPrompt(questionsText, answersText) {
+  var answersPart = answersText
+    ? 'Answer key PDF text:\n' + answersText
+    : 'No answer key provided - infer correct answers from context.';
+  return 'You are extracting multiple choice quiz questions from two school exam PDFs.\n\n' +
+    'Match each question to its correct answer and format everything as a CSV.\n\n' +
+    'Return ONLY the raw CSV, no markdown, no explanation.\n\n' +
+    'CSV format (first row must be exactly this header):\n' +
+    'Question,A,B,C,D,Correct\n\n' +
+    'Rules:\n' +
+    '- One row per question\n' +
+    '- Correct column must be A, B, C, or D\n' +
+    '- Match questions to answers by question number\n' +
+    '- Wrap fields containing commas in double quotes\n\n' +
+    'Questions PDF text:\n' + questionsText + '\n\n' + answersPart;
+}
+
+function cleanCsvOutput(raw) {
+  var out = raw.trim();
+  out = out.replace(/^```[a-z]*\n?/i, '').replace(/\n?```$/i, '').trim();
+  if (!out.toLowerCase().startsWith('question')) {
+    out = 'Question,A,B,C,D,Correct\n' + out;
+  }
+  return out;
+}
+
+async function callClaude(prompt, apiKey) {
+  var res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-allow-browser': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 8192,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  if (!res.ok) {
+    var err = await res.json().catch(function(){ return {}; });
+    throw new Error((err.error && err.error.message) || ('API error ' + res.status));
+  }
+  var data = await res.json();
+  return data.content[0].text;
+}
+
+function usePdfCsv() {
+  var csv = el('pdfCsvOutput').value.trim();
+  if (!csv) return;
+  parseCSV(csv, 'from-pdf');
+  el('uploadName').scrollIntoView({ behavior: 'smooth' });
+  showMsg('pdfMsg', 'CSV sent to upload section above. Set a name and click Upload to Library.', 'ok');
+}
+
+function downloadPdfCsv() {
+  var csv = el('pdfCsvOutput').value.trim();
+  if (!csv) return;
+  var a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'extracted-quiz.csv';
+  a.click();
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+loadHome();
+</script>
+</body>
+</html>
