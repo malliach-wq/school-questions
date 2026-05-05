@@ -616,21 +616,16 @@ function renderQ() {
 
 function pick(idx) {
   const q = currentQuiz.questions[currentQ];
-  const correct = q.a;
-  const right = idx === correct;
-  results.push(right);
+  results.push(idx === q.a);
 
+  // Highlight selected, disable all — no correct/wrong shown
   document.querySelectorAll('.ans-btn').forEach((b,i) => {
     b.disabled = true;
-    if (i === correct) b.classList.add('correct');
-    else if (i === idx && !right) b.classList.add('wrong');
+    if (i === idx) b.classList.add('selected');
   });
 
-  el('feedback').innerHTML = right
-    ? '<span class="fb-icon">✅</span><span class="fb-text ok">Correct! Well done.</span>'
-    : `<span class="fb-icon">❌</span><span class="fb-text bad">Correct answer: ${q.o[correct]}</span>`;
-  // Auto-advance after a short pause
-  setTimeout(() => nextQ(), 1100);
+  // Brief pause so the selection registers visually, then move on
+  setTimeout(() => nextQ(), 400);
 }
 
 function nextQ() {
@@ -1139,3 +1134,4 @@ loadHome();
 </script>
 </body>
 </html>
+                                                                                                                                                                                                                                                              
