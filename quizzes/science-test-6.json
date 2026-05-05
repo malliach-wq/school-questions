@@ -1,0 +1,157 @@
+{
+  "name": "Science – Test 6",
+  "subject": "Science",
+  "icon": "🌊",
+  "questions": [
+    {
+      "q": "When using a key, what kind of answers do you usually give?",
+      "o": [
+        "Often",
+        "Sometimes",
+        "Yes or No",
+        "Maybe"
+      ],
+      "a": 2
+    },
+    {
+      "q": "What is an invertebrate?",
+      "o": [
+        "An animal without a backbone",
+        "A type of plant",
+        "An animal with a spine",
+        "A cold-blooded mammal"
+      ],
+      "a": 0
+    },
+    {
+      "q": "What provides energy to almost all food chains?",
+      "o": [
+        "The Sun",
+        "The Moon",
+        "The Wind",
+        "The Ocean"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Which group has dry scales and lays eggs?",
+      "o": [
+        "Reptiles",
+        "Fish",
+        "Amphibians",
+        "Mammals"
+      ],
+      "a": 0
+    },
+    {
+      "q": "An 'Endangered' animal is...",
+      "o": [
+        "Already extinct",
+        "At risk of disappearing",
+        "Very dangerous",
+        "Commonly found"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Spiders are NOT insects because they have...",
+      "o": [
+        "Antennae",
+        "6 legs",
+        "8 legs",
+        "Wings"
+      ],
+      "a": 2
+    },
+    {
+      "q": "The animal that is hunted and eaten is the...",
+      "o": [
+        "Predator",
+        "Sun",
+        "Prey",
+        "Producer"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which of these has an exoskeleton?",
+      "o": [
+        "Ant",
+        "Dog",
+        "Fish",
+        "Human"
+      ],
+      "a": 0
+    },
+    {
+      "q": "What do all vertebrates have in common?",
+      "o": [
+        "A backbone",
+        "6 legs",
+        "Feathers",
+        "Gills"
+      ],
+      "a": 0
+    },
+    {
+      "q": "An animal that hunts and eats others is a...",
+      "o": [
+        "Producer",
+        "Prey",
+        "Plant",
+        "Predator"
+      ],
+      "a": 3
+    },
+    {
+      "q": "What does it mean if an animal is 'Extinct'?",
+      "o": [
+        "They changed color",
+        "They are sleeping",
+        "None are left alive",
+        "They are rare"
+      ],
+      "a": 2
+    },
+    {
+      "q": "What is 'Deforestation'?",
+      "o": [
+        "A type of animal",
+        "Cutting down forests",
+        "Planting new seeds",
+        "A desert storm"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Why is it bad to throw plastic in the sea?",
+      "o": [
+        "It makes the water blue",
+        "It helps the fish swim",
+        "Animals can get stuck or eat it",
+        "It turns the water red"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which plant is a common 'Producer' in the UAE desert?",
+      "o": [
+        "Ghaf Tree",
+        "Pine Tree",
+        "Seaweed",
+        "Oak Tree"
+      ],
+      "a": 0
+    },
+    {
+      "q": "If a key asks 'Does it have a trunk?', which plant are you likely identifying?",
+      "o": [
+        "Flower",
+        "Grass",
+        "Ghaf Tree",
+        "Saltbush"
+      ],
+      "a": 2
+    }
+  ]
+}

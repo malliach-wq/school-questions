@@ -1,0 +1,157 @@
+{
+  "name": "Science – Test 5",
+  "subject": "Science",
+  "icon": "🌍",
+  "questions": [
+    {
+      "q": "An 'Endangered' animal is...",
+      "o": [
+        "Already extinct",
+        "Commonly found",
+        "At risk of disappearing",
+        "Very dangerous"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which group of vertebrates has fur and gives birth to live young?",
+      "o": [
+        "Mammals",
+        "Amphibians",
+        "Birds",
+        "Reptiles"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Look at: Grass → Rabbit → Fox. What is the rabbit?",
+      "o": [
+        "A consumer",
+        "A producer",
+        "An inanimate object",
+        "The sun"
+      ],
+      "a": 0
+    },
+    {
+      "q": "What is 'Litter'?",
+      "o": [
+        "Trash left in public places",
+        "Forest soil",
+        "A group of kittens",
+        "A type of plant"
+      ],
+      "a": 0
+    },
+    {
+      "q": "What is 'Conservation'?",
+      "o": [
+        "Cutting down trees",
+        "Protecting nature",
+        "Wasting water",
+        "Hunting animals"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Humans belong to which group?",
+      "o": [
+        "Birds",
+        "Reptiles",
+        "Invertebrates",
+        "Mammals"
+      ],
+      "a": 3
+    },
+    {
+      "q": "What is 'Pollution'?",
+      "o": [
+        "Harmful substances in nature",
+        "Counting birds",
+        "Cleaning the beach",
+        "Planting trees"
+      ],
+      "a": 0
+    },
+    {
+      "q": "When using a key, what kind of answers do you usually give?",
+      "o": [
+        "Sometimes",
+        "Maybe",
+        "Often",
+        "Yes or No"
+      ],
+      "a": 3
+    },
+    {
+      "q": "What does it mean if an animal is 'Extinct'?",
+      "o": [
+        "They changed color",
+        "None are left alive",
+        "They are sleeping",
+        "They are rare"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Which plant is a common 'Producer' in the UAE desert?",
+      "o": [
+        "Oak Tree",
+        "Pine Tree",
+        "Ghaf Tree",
+        "Seaweed"
+      ],
+      "a": 2
+    },
+    {
+      "q": "The animal that is hunted and eaten is the...",
+      "o": [
+        "Sun",
+        "Predator",
+        "Prey",
+        "Producer"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Spiders are NOT insects because they have...",
+      "o": [
+        "8 legs",
+        "6 legs",
+        "Wings",
+        "Antennae"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Which of these has an exoskeleton?",
+      "o": [
+        "Dog",
+        "Ant",
+        "Fish",
+        "Human"
+      ],
+      "a": 1
+    },
+    {
+      "q": "If a key asks 'Does it have a trunk?', which plant are you likely identifying?",
+      "o": [
+        "Grass",
+        "Flower",
+        "Saltbush",
+        "Ghaf Tree"
+      ],
+      "a": 3
+    },
+    {
+      "q": "Which question is most specific for identifying a bird?",
+      "o": [
+        "Is it an animal?",
+        "Can it move?",
+        "Does it eat food?",
+        "Does it have feathers?"
+      ],
+      "a": 3
+    }
+  ]
+}

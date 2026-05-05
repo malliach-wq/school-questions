@@ -1,0 +1,157 @@
+{
+  "name": "Science – Test 7",
+  "subject": "Science",
+  "icon": "🌲",
+  "questions": [
+    {
+      "q": "Which plant is a common 'Producer' in the UAE desert?",
+      "o": [
+        "Seaweed",
+        "Pine Tree",
+        "Oak Tree",
+        "Ghaf Tree"
+      ],
+      "a": 3
+    },
+    {
+      "q": "Which of these has an exoskeleton?",
+      "o": [
+        "Human",
+        "Ant",
+        "Dog",
+        "Fish"
+      ],
+      "a": 1
+    },
+    {
+      "q": "An 'Endangered' animal is...",
+      "o": [
+        "Commonly found",
+        "Already extinct",
+        "At risk of disappearing",
+        "Very dangerous"
+      ],
+      "a": 2
+    },
+    {
+      "q": "What is 'Pollution'?",
+      "o": [
+        "Planting trees",
+        "Harmful substances in nature",
+        "Counting birds",
+        "Cleaning the beach"
+      ],
+      "a": 1
+    },
+    {
+      "q": "What is 'Litter'?",
+      "o": [
+        "Trash left in public places",
+        "Forest soil",
+        "A group of kittens",
+        "A type of plant"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Why is it bad to throw plastic in the sea?",
+      "o": [
+        "It turns the water red",
+        "Animals can get stuck or eat it",
+        "It makes the water blue",
+        "It helps the fish swim"
+      ],
+      "a": 1
+    },
+    {
+      "q": "How do fish get oxygen underwater?",
+      "o": [
+        "By holding their breath",
+        "Through their tail",
+        "Using lungs",
+        "Using gills"
+      ],
+      "a": 3
+    },
+    {
+      "q": "What is an invertebrate?",
+      "o": [
+        "A type of plant",
+        "An animal with a spine",
+        "An animal without a backbone",
+        "A cold-blooded mammal"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Amphibians are unique because they...",
+      "o": [
+        "Have a hard shell",
+        "Are warm-blooded",
+        "Live in water and on land",
+        "Have feathers"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which group has dry scales and lays eggs?",
+      "o": [
+        "Reptiles",
+        "Fish",
+        "Amphibians",
+        "Mammals"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Which of these is a 'warm-blooded' animal?",
+      "o": [
+        "Eagle (Bird)",
+        "Frog (Amphibian)",
+        "Snake (Reptile)",
+        "Shark (Fish)"
+      ],
+      "a": 0
+    },
+    {
+      "q": "If a key asks 'Does it have a trunk?', which plant are you likely identifying?",
+      "o": [
+        "Grass",
+        "Flower",
+        "Ghaf Tree",
+        "Saltbush"
+      ],
+      "a": 2
+    },
+    {
+      "q": "An animal that hunts and eats others is a...",
+      "o": [
+        "Plant",
+        "Prey",
+        "Producer",
+        "Predator"
+      ],
+      "a": 3
+    },
+    {
+      "q": "What provides energy to almost all food chains?",
+      "o": [
+        "The Ocean",
+        "The Wind",
+        "The Sun",
+        "The Moon"
+      ],
+      "a": 2
+    },
+    {
+      "q": "When using a key, what kind of answers do you usually give?",
+      "o": [
+        "Sometimes",
+        "Yes or No",
+        "Often",
+        "Maybe"
+      ],
+      "a": 1
+    }
+  ]
+}

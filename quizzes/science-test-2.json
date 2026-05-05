@@ -1,0 +1,157 @@
+{
+  "name": "Science – Test 2",
+  "subject": "Science",
+  "icon": "🦎",
+  "questions": [
+    {
+      "q": "If a key asks 'Does it have a trunk?', which plant are you likely identifying?",
+      "o": [
+        "Ghaf Tree",
+        "Grass",
+        "Flower",
+        "Saltbush"
+      ],
+      "a": 0
+    },
+    {
+      "q": "What is an invertebrate?",
+      "o": [
+        "An animal with a spine",
+        "A cold-blooded mammal",
+        "An animal without a backbone",
+        "A type of plant"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Spiders are NOT insects because they have...",
+      "o": [
+        "Antennae",
+        "6 legs",
+        "8 legs",
+        "Wings"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which of these is a 'warm-blooded' animal?",
+      "o": [
+        "Eagle (Bird)",
+        "Frog (Amphibian)",
+        "Shark (Fish)",
+        "Snake (Reptile)"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Snails and slugs belong to which group?",
+      "o": [
+        "Arachnids",
+        "Molluscs",
+        "Insects",
+        "Vertebrates"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Look at: Grass → Rabbit → Fox. What is the rabbit?",
+      "o": [
+        "A producer",
+        "A consumer",
+        "An inanimate object",
+        "The sun"
+      ],
+      "a": 1
+    },
+    {
+      "q": "How do fish get oxygen underwater?",
+      "o": [
+        "By holding their breath",
+        "Through their tail",
+        "Using gills",
+        "Using lungs"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Humans belong to which group?",
+      "o": [
+        "Mammals",
+        "Birds",
+        "Invertebrates",
+        "Reptiles"
+      ],
+      "a": 0
+    },
+    {
+      "q": "An animal that hunts and eats others is a...",
+      "o": [
+        "Predator",
+        "Prey",
+        "Producer",
+        "Plant"
+      ],
+      "a": 0
+    },
+    {
+      "q": "What is 'Conservation'?",
+      "o": [
+        "Wasting water",
+        "Protecting nature",
+        "Hunting animals",
+        "Cutting down trees"
+      ],
+      "a": 1
+    },
+    {
+      "q": "A change to a habitat caused by humans is...",
+      "o": [
+        "A seasonal change",
+        "A natural flood",
+        "Building a road",
+        "A volcanic eruption"
+      ],
+      "a": 2
+    },
+    {
+      "q": "What is 'Deforestation'?",
+      "o": [
+        "A desert storm",
+        "A type of animal",
+        "Planting new seeds",
+        "Cutting down forests"
+      ],
+      "a": 3
+    },
+    {
+      "q": "Why is it bad to throw plastic in the sea?",
+      "o": [
+        "It turns the water red",
+        "It makes the water blue",
+        "Animals can get stuck or eat it",
+        "It helps the fish swim"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Why was Ricky's classification key better than Uman's?",
+      "o": [
+        "He had better drawings",
+        "He used shorter questions",
+        "He used more animals",
+        "He used specific questions"
+      ],
+      "a": 3
+    },
+    {
+      "q": "Which group of invertebrates has 8 legs?",
+      "o": [
+        "Crustaceans",
+        "Arachnids",
+        "Insects",
+        "Molluscs"
+      ],
+      "a": 1
+    }
+  ]
+}

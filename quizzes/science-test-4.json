@@ -1,0 +1,157 @@
+{
+  "name": "Science – Test 4",
+  "subject": "Science",
+  "icon": "🐠",
+  "questions": [
+    {
+      "q": "How do fish get oxygen underwater?",
+      "o": [
+        "Through their tail",
+        "Using lungs",
+        "Using gills",
+        "By holding their breath"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which group has dry scales and lays eggs?",
+      "o": [
+        "Reptiles",
+        "Amphibians",
+        "Fish",
+        "Mammals"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Which of these has an exoskeleton?",
+      "o": [
+        "Human",
+        "Dog",
+        "Ant",
+        "Fish"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which question is most specific for identifying a bird?",
+      "o": [
+        "Does it have feathers?",
+        "Does it eat food?",
+        "Is it an animal?",
+        "Can it move?"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Spiders are NOT insects because they have...",
+      "o": [
+        "6 legs",
+        "Wings",
+        "Antennae",
+        "8 legs"
+      ],
+      "a": 3
+    },
+    {
+      "q": "Which group of invertebrates has 8 legs?",
+      "o": [
+        "Insects",
+        "Molluscs",
+        "Crustaceans",
+        "Arachnids"
+      ],
+      "a": 3
+    },
+    {
+      "q": "Snails and slugs belong to which group?",
+      "o": [
+        "Molluscs",
+        "Arachnids",
+        "Insects",
+        "Vertebrates"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Amphibians are unique because they...",
+      "o": [
+        "Are warm-blooded",
+        "Have a hard shell",
+        "Have feathers",
+        "Live in water and on land"
+      ],
+      "a": 3
+    },
+    {
+      "q": "A change to a habitat caused by humans is...",
+      "o": [
+        "A volcanic eruption",
+        "A seasonal change",
+        "Building a road",
+        "A natural flood"
+      ],
+      "a": 2
+    },
+    {
+      "q": "When using a key, what kind of answers do you usually give?",
+      "o": [
+        "Sometimes",
+        "Maybe",
+        "Yes or No",
+        "Often"
+      ],
+      "a": 2
+    },
+    {
+      "q": "What is the goal of a classification key?",
+      "o": [
+        "To identify a living thing",
+        "To name all plants",
+        "To see which is fastest",
+        "To count animals"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Which plant is a common 'Producer' in the UAE desert?",
+      "o": [
+        "Seaweed",
+        "Oak Tree",
+        "Pine Tree",
+        "Ghaf Tree"
+      ],
+      "a": 3
+    },
+    {
+      "q": "In a food chain, a plant is called a...",
+      "o": [
+        "Predator",
+        "Prey",
+        "Producer",
+        "Consumer"
+      ],
+      "a": 2
+    },
+    {
+      "q": "What is an invertebrate?",
+      "o": [
+        "A cold-blooded mammal",
+        "An animal with a spine",
+        "An animal without a backbone",
+        "A type of plant"
+      ],
+      "a": 2
+    },
+    {
+      "q": "An 'Endangered' animal is...",
+      "o": [
+        "Very dangerous",
+        "Already extinct",
+        "Commonly found",
+        "At risk of disappearing"
+      ],
+      "a": 3
+    }
+  ]
+}

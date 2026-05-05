@@ -1,0 +1,157 @@
+{
+  "name": "Science – Test 10",
+  "subject": "Science",
+  "icon": "🌺",
+  "questions": [
+    {
+      "q": "An 'Endangered' animal is...",
+      "o": [
+        "Very dangerous",
+        "Commonly found",
+        "At risk of disappearing",
+        "Already extinct"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which of these is a 'warm-blooded' animal?",
+      "o": [
+        "Snake (Reptile)",
+        "Frog (Amphibian)",
+        "Shark (Fish)",
+        "Eagle (Bird)"
+      ],
+      "a": 3
+    },
+    {
+      "q": "What is 'Pollution'?",
+      "o": [
+        "Cleaning the beach",
+        "Planting trees",
+        "Harmful substances in nature",
+        "Counting birds"
+      ],
+      "a": 2
+    },
+    {
+      "q": "How many legs does a beetle (insect) have?",
+      "o": [
+        "2",
+        "10",
+        "6",
+        "8"
+      ],
+      "a": 2
+    },
+    {
+      "q": "How do fish get oxygen underwater?",
+      "o": [
+        "Using lungs",
+        "Through their tail",
+        "Using gills",
+        "By holding their breath"
+      ],
+      "a": 2
+    },
+    {
+      "q": "What is 'Litter'?",
+      "o": [
+        "Forest soil",
+        "Trash left in public places",
+        "A type of plant",
+        "A group of kittens"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Why is it bad to throw plastic in the sea?",
+      "o": [
+        "It turns the water red",
+        "Animals can get stuck or eat it",
+        "It makes the water blue",
+        "It helps the fish swim"
+      ],
+      "a": 1
+    },
+    {
+      "q": "What provides energy to almost all food chains?",
+      "o": [
+        "The Ocean",
+        "The Wind",
+        "The Sun",
+        "The Moon"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which group of invertebrates has 8 legs?",
+      "o": [
+        "Insects",
+        "Crustaceans",
+        "Arachnids",
+        "Molluscs"
+      ],
+      "a": 2
+    },
+    {
+      "q": "When using a key, what kind of answers do you usually give?",
+      "o": [
+        "Often",
+        "Sometimes",
+        "Maybe",
+        "Yes or No"
+      ],
+      "a": 3
+    },
+    {
+      "q": "A change to a habitat caused by humans is...",
+      "o": [
+        "A natural flood",
+        "A volcanic eruption",
+        "Building a road",
+        "A seasonal change"
+      ],
+      "a": 2
+    },
+    {
+      "q": "If a key asks 'Does it have a trunk?', which plant are you likely identifying?",
+      "o": [
+        "Saltbush",
+        "Grass",
+        "Flower",
+        "Ghaf Tree"
+      ],
+      "a": 3
+    },
+    {
+      "q": "Why was Ricky's classification key better than Uman's?",
+      "o": [
+        "He used specific questions",
+        "He used shorter questions",
+        "He used more animals",
+        "He had better drawings"
+      ],
+      "a": 0
+    },
+    {
+      "q": "What is 'Conservation'?",
+      "o": [
+        "Cutting down trees",
+        "Wasting water",
+        "Protecting nature",
+        "Hunting animals"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which of these has an exoskeleton?",
+      "o": [
+        "Human",
+        "Dog",
+        "Fish",
+        "Ant"
+      ],
+      "a": 3
+    }
+  ]
+}

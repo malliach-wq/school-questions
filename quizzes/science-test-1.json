@@ -1,0 +1,157 @@
+{
+  "name": "Science – Test 1",
+  "subject": "Science",
+  "icon": "🌿",
+  "questions": [
+    {
+      "q": "In a food chain, a plant is called a...",
+      "o": [
+        "Prey",
+        "Predator",
+        "Producer",
+        "Consumer"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which group has dry scales and lays eggs?",
+      "o": [
+        "Reptiles",
+        "Mammals",
+        "Amphibians",
+        "Fish"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Which group of invertebrates has 8 legs?",
+      "o": [
+        "Molluscs",
+        "Crustaceans",
+        "Arachnids",
+        "Insects"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Humans belong to which group?",
+      "o": [
+        "Invertebrates",
+        "Mammals",
+        "Reptiles",
+        "Birds"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Why is it bad to throw plastic in the sea?",
+      "o": [
+        "Animals can get stuck or eat it",
+        "It makes the water blue",
+        "It helps the fish swim",
+        "It turns the water red"
+      ],
+      "a": 0
+    },
+    {
+      "q": "The animal that is hunted and eaten is the...",
+      "o": [
+        "Predator",
+        "Producer",
+        "Prey",
+        "Sun"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Spiders are NOT insects because they have...",
+      "o": [
+        "Antennae",
+        "Wings",
+        "8 legs",
+        "6 legs"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which group of vertebrates has fur and gives birth to live young?",
+      "o": [
+        "Mammals",
+        "Amphibians",
+        "Reptiles",
+        "Birds"
+      ],
+      "a": 0
+    },
+    {
+      "q": "What provides energy to almost all food chains?",
+      "o": [
+        "The Ocean",
+        "The Sun",
+        "The Moon",
+        "The Wind"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Amphibians are unique because they...",
+      "o": [
+        "Are warm-blooded",
+        "Have feathers",
+        "Live in water and on land",
+        "Have a hard shell"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which plant is a common 'Producer' in the UAE desert?",
+      "o": [
+        "Ghaf Tree",
+        "Pine Tree",
+        "Seaweed",
+        "Oak Tree"
+      ],
+      "a": 0
+    },
+    {
+      "q": "What is the goal of a classification key?",
+      "o": [
+        "To name all plants",
+        "To see which is fastest",
+        "To identify a living thing",
+        "To count animals"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which of these is a 'warm-blooded' animal?",
+      "o": [
+        "Eagle (Bird)",
+        "Snake (Reptile)",
+        "Shark (Fish)",
+        "Frog (Amphibian)"
+      ],
+      "a": 0
+    },
+    {
+      "q": "How many legs does a beetle (insect) have?",
+      "o": [
+        "8",
+        "2",
+        "10",
+        "6"
+      ],
+      "a": 3
+    },
+    {
+      "q": "When using a key, what kind of answers do you usually give?",
+      "o": [
+        "Maybe",
+        "Often",
+        "Sometimes",
+        "Yes or No"
+      ],
+      "a": 3
+    }
+  ]
+}

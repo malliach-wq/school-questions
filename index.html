@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>School Questions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --accent:#714b67;--accent-l:#f3eef7;
+      --green:#16a34a;--green-l:#dcfce7;
+      --red:#dc2626;--red-l:#fee2e2;
+      --blue:#2563eb;--blue-l:#eff6ff;
+      --amber:#d97706;--amber-l:#fef3e2;
+      --border:#ebebeb;--muted:#888;--text:#1a1a1a;
+    }
+    body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:var(--text);min-height:100vh}
+
+    /* ── Topbar ── */
+    .topbar{height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 32px;gap:10px;position:sticky;top:0;background:#fff;z-index:100}
+    .topbar-logo{width:28px;height:28px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;letter-spacing:-0.5px;cursor:pointer;user-select:none}
+    .topbar-title{font-size:.9rem;font-weight:500;color:#555}
+    .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+    .btn-sm{background:none;border:1px solid var(--border);padding:5px 13px;border-radius:6px;font-size:.8rem;font-weight:500;color:#555;cursor:pointer;font-family:inherit;transition:border-color .15s,background .15s;display:none}
+    .btn-sm:hover{border-color:#ccc;background:#fafafa}
+    .btn-sm.visible{display:inline-flex;align-items:center;gap:5px}
+
+    /* ── Pages ── */
+    .page{display:none}.page.active{display:block}
+
+    /* ── HOME ── */
+    .main{max-width:900px;margin:0 auto;padding:48px 32px 80px}
+    .page-h{font-size:1.6rem;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
+    .page-sub{font-size:.875rem;color:var(--muted);margin-bottom:40px}
+    .subject-group{margin-bottom:36px}
+    .group-label{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px}
+    .card{border:1px solid var(--border);border-radius:12px;padding:22px 16px;cursor:pointer;background:#fff;transition:box-shadow .18s,border-color .18s,transform .15s;position:relative;overflow:hidden}
+    .card:hover{border-color:#d0d0d0;box-shadow:0 6px 24px rgba(0,0,0,.07);transform:translateY(-2px)}
+    .card-icon{width:44px;height:44px;border-radius:10px;background:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px}
+    .card-name{font-size:.83rem;font-weight:600;margin-bottom:3px;line-height:1.3}
+    .card-meta{font-size:.73rem;color:var(--muted)}
+    .card-badge{position:absolute;top:10px;right:10px;font-size:.68rem;font-weight:600;padding:3px 8px;border-radius:20px}
+    .badge-perfect{background:var(--green-l);color:var(--green)}
+    .badge-done{background:#f0f0f0;color:#666}
+    .loading{color:var(--muted);font-size:.9rem;padding:24px 0}
+
+    /* ── QUIZ ── */
+    .quiz-wrap{max-width:720px;margin:0 auto;padding:40px 32px 80px}
+    .qhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .qlabel{font-size:.73rem;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+    .qcount{font-size:.82rem;font-weight:600;color:var(--accent)}
+    .prog{height:4px;background:var(--border);border-radius:2px;margin-bottom:40px;overflow:hidden}
+    .prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease}
+    .qcard{background:#fafafa;border:1px solid var(--border);border-radius:16px;padding:36px 32px;margin-bottom:28px}
+    .qnum{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+    .qtext{font-size:1.22rem;font-weight:600;line-height:1.45;letter-spacing:-.01em}
+    .answers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .ans-btn{display:flex;align-items:center;gap:14px;padding:16px 18px;border:1.5px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;text-align:left;transition:border-color .15s,background .15s,transform .1s;font-family:inherit}
+    .ans-btn:hover:not(:disabled){border-color:var(--accent);background:var(--accent-l);transform:translateY(-1px)}
+    .ans-lbl{width:28px;height:28px;flex-shrink:0;border-radius:6px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#555;transition:background .15s,color .15s}
+    .ans-txt{font-size:.9rem;font-weight:500;line-height:1.35}
+    .ans-btn.selected{border-color:var(--accent);background:var(--accent-l)}
+    .ans-btn.selected .ans-lbl{background:var(--accent);color:#fff}
+    .ans-btn.correct{border-color:var(--green);background:var(--green-l)}
+    .ans-btn.correct .ans-lbl{background:var(--green);color:#fff}
+    .ans-btn.wrong{border-color:var(--red);background:var(--red-l)}
+    .ans-btn.wrong .ans-lbl{background:var(--red);color:#fff}
+    .ans-btn:disabled{cursor:default;transform:none}
+    .feedback{display:flex;align-items:center;gap:10px;margin-top:20px;min-height:28px}
+    .fb-icon{font-size:1.2rem}
+    .fb-text{font-size:.88rem;font-weight:500}
+    .fb-text.ok{color:var(--green)}.fb-text.bad{color:var(--red)}
+    .quiz-foot{display:flex;justify-content:flex-end;margin-top:24px}
+    .btn-next{background:var(--accent);color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s,transform .1s;display:none}
+    .btn-next:hover{background:#5e3d56;transform:translateY(-1px)}
+    .btn-next.visible{display:block}
+
+    /* ── RESULTS ── */
+    .res-wrap{max-width:600px;margin:0 auto;padding:60px 32px 80px;text-align:center}
+    .res-emoji{font-size:3.5rem;margin-bottom:16px}
+    .res-title{font-size:1.7rem;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+    .res-sub{font-size:.95rem;color:var(--muted);margin-bottom:8px}
+    .res-best{font-size:.8rem;color:var(--muted);margin-bottom:32px}
+    .res-best strong{color:var(--green)}
+    .ring{width:150px;height:150px;border-radius:50%;background:conic-gradient(var(--accent) 0%,var(--accent) var(--pct),var(--border) var(--pct));display:flex;align-items:center;justify-content:center;margin:0 auto 36px}
+    .ring-inner{width:122px;height:122px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .ring-num{font-size:2.2rem;font-weight:700;line-height:1}
+    .ring-den{font-size:.8rem;color:var(--muted);margin-top:2px}
+    .breakdown{background:#fafafa;border:1px solid var(--border);border-radius:12px;padding:18px 22px;margin-bottom:28px;text-align:left;max-height:340px;overflow-y:auto}
+    .bd-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:.83rem}
+    .bd-row:last-child{border-bottom:none}
+    .bd-q{flex:1;margin-right:10px;line-height:1.35}
+    .bd-badge{font-size:.72rem;font-weight:600;padding:3px 8px;border-radius:20px;white-space:nowrap}
+    .bd-badge.ok{background:var(--green-l);color:var(--green)}.bd-badge.bad{background:var(--red-l);color:var(--red)}
+    .res-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn-retry,.btn-home{padding:12px 26px;border-radius:8px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s,transform .1s}
+    .btn-retry{background:var(--accent);color:#fff;border:none}
+    .btn-retry:hover{background:#5e3d56;transform:translateY(-1px)}
+    .btn-home{background:#fff;color:#555;border:1px solid var(--border)}
+    .btn-home:hover{border-color:#ccc;background:#fafafa;transform:translateY(-1px)}
+
+    /* ── ADMIN ── */
+    .admin-wrap{max-width:680px;margin:0 auto;padding:48px 32px 80px}
+    .admin-h{font-size:1.4rem;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
+    .admin-sub{font-size:.87rem;color:var(--muted);margin-bottom:36px}
+    .admin-section{margin-bottom:36px}
+    .admin-section-title{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+    .form-group{margin-bottom:16px}
+    .form-label{display:block;font-size:.82rem;font-weight:500;margin-bottom:6px}
+    .form-input{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:.88rem;font-family:inherit;color:var(--text);transition:border-color .15s;outline:none}
+    .form-input:focus{border-color:var(--accent)}
+    .form-hint{font-size:.75rem;color:var(--muted);margin-top:5px}
+    .btn-primary{background:var(--accent);color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+    .btn-primary:hover{background:#5e3d56}
+    .btn-danger{background:var(--red-l);color:var(--red);border:none;padding:7px 14px;border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit}
+    .btn-outline{background:#fff;color:#555;border:1px solid var(--border);padding:9px 18px;border-radius:8px;font-size:.85rem;font-weight:500;cursor:pointer;font-family:inherit;transition:border-color .15s}
+    .btn-outline:hover{border-color:#ccc;background:#fafafa}
+
+    /* Drop zone */
+    .dropzone{border:2px dashed var(--border);border-radius:12px;padding:36px 24px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
+    .dropzone:hover,.dropzone.drag{border-color:var(--accent);background:var(--accent-l)}
+    .dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    .dz-icon{font-size:2rem;margin-bottom:10px}
+    .dz-text{font-size:.88rem;font-weight:500;color:#555;margin-bottom:4px}
+    .dz-hint{font-size:.78rem;color:var(--muted)}
+
+    /* Preview table */
+    .preview-box{background:#fafafa;border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:16px;display:none}
+    .preview-title{font-size:.82rem;font-weight:600;margin-bottom:10px}
+    .preview-table{width:100%;border-collapse:collapse;font-size:.78rem}
+    .preview-table th{text-align:left;padding:5px 8px;border-bottom:1px solid var(--border);color:var(--muted);font-weight:600}
+    .preview-table td{padding:5px 8px;border-bottom:1px solid var(--border)}
+    .preview-table tr:last-child td{border-bottom:none}
+    .preview-actions{display:flex;gap:10px;margin-top:14px;align-items:center}
+
+    /* Quiz list in admin */
+    .quiz-list-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+    .quiz-list-item:last-child{border-bottom:none}
+    .qli-icon{font-size:1.4rem}
+    .qli-info{flex:1}
+    .qli-name{font-size:.88rem;font-weight:600}
+    .qli-meta{font-size:.75rem;color:var(--muted)}
+    .qli-built{font-size:.7rem;color:var(--muted);font-style:italic}
+
+    /* Status messages */
+    .msg{padding:12px 16px;border-radius:8px;font-size:.85rem;font-weight:500;margin-top:14px;display:none}
+    .msg.ok{background:var(--green-l);color:var(--green)}
+    .msg.err{background:var(--red-l);color:var(--red)}
+    .msg.info{background:var(--blue-l);color:var(--blue)}
+    .msg.visible{display:block}
+
+    /* Login */
+    .login-wrap{max-width:360px;margin:80px auto;padding:32px;border:1px solid var(--border);border-radius:16px}
+    .login-title{font-size:1.2rem;font-weight:600;margin-bottom:6px;text-align:center}
+    .login-sub{font-size:.83rem;color:var(--muted);margin-bottom:24px;text-align:center}
+
+    @media(max-width:560px){
+      .main,.quiz-wrap,.res-wrap,.admin-wrap{padding-left:16px;padding-right:16px}
+      .topbar{padding:0 16px}
+      .answers{grid-template-columns:1fr}
+      .cards{grid-template-columns:repeat(2,1fr)}
+      .qtext{font-size:1.05rem}
+      .qcard{padding:24px 18px}
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo" id="logoBtn" title="Admin (5× click)">SQ</div>
+  <span class="topbar-title">School Questions</span>
+  <div class="topbar-right">
+    <button class="btn-sm" id="btnBack" onclick="goHome()">← Tests</button>
+    <button class="btn-sm" id="btnAdmin" onclick="goAdmin()">⚙ Admin</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="pageHome">
+  <div class="main">
+    <h1 class="page-h">Quiz Library</h1>
+    <p class="page-sub">Choose a test to begin</p>
+    <div id="homeContent"><p class="loading">Loading quizzes…</p></div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="page" id="pageQuiz">
+  <div class="quiz-wrap">
+    <div class="qhdr">
+      <span class="qlabel" id="quizLabel"></span>
+      <span class="qcount" id="quizCount"></span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="progFill"></div></div>
+    <div class="qcard">
+      <div class="qnum" id="qNum"></div>
+      <div class="qtext" id="qText"></div>
+    </div>
+    <div class="answers" id="answersGrid"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="quiz-foot">
+      <button class="btn-next" id="btnNext" onclick="nextQ()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="page" id="pageResults">
+  <div class="res-wrap">
+    <div class="res-emoji" id="resEmoji"></div>
+    <h2 class="res-title" id="resTitle"></h2>
+    <p class="res-sub" id="resSub"></p>
+    <p class="res-best" id="resBest"></p>
+    <div class="ring" id="ring">
+      <div class="ring-inner">
+        <div class="ring-num" id="ringNum"></div>
+        <div class="ring-den" id="ringDen"></div>
+      </div>
+    </div>
+    <div class="breakdown" id="breakdown"></div>
+    <div class="res-actions">
+      <button class="btn-retry" onclick="retryTest()">Try Again</button>
+      <button class="btn-home" onclick="goHome()">All Tests</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div class="page" id="pageAdminLogin">
+  <div class="login-wrap">
+    <div class="login-title">🔒 Admin</div>
+    <p class="login-sub" id="loginSub">Enter the admin password</p>
+    <div class="form-group">
+      <label class="form-label" id="loginFieldLabel">Password</label>
+      <input class="form-input" type="password" id="loginInput" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <div id="loginConfirmGroup" style="display:none" class="form-group">
+      <label class="form-label">Confirm Password</label>
+      <input class="form-input" type="password" id="loginConfirm" placeholder="Confirm password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="btn-primary" onclick="doLogin()" style="width:100%">Continue</button>
+    <div class="msg" id="loginMsg"></div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="page" id="pageAdmin">
+  <div class="admin-wrap">
+    <h1 class="admin-h">Admin Panel</h1>
+    <p class="admin-sub">Upload quizzes, manage your library, and configure settings</p>
+
+    <!-- Upload section -->
+    <div class="admin-section">
+      <div class="admin-section-title">Upload New Quiz</div>
+
+      <div class="form-group">
+        <label class="form-label">Quiz Name <span style="color:var(--muted);font-weight:400">(auto-filled from filename)</span></label>
+        <input class="form-input" id="uploadName" placeholder="e.g. Maths Test 1"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <select class="form-input" id="uploadSubject">
+          <option>Science</option><option>Maths</option><option>English</option>
+          <option>History</option><option>Geography</option><option>Other</option>
+        </select>
+      </div>
+
+      <div class="dropzone" id="dropzone">
+        <input type="file" id="csvFile" accept=".csv" onchange="handleFile(event)"/>
+        <div class="dz-icon">📄</div>
+        <div class="dz-text">Drop CSV file here or click to browse</div>
+        <div class="dz-hint">Format: Question, A, B, C, D, Correct (A/B/C/D) — one row per question</div>
+      </div>
+
+      <div style="margin-top:10px;display:flex;gap:10px">
+        <button class="btn-outline" onclick="downloadTemplate()">⬇ Download CSV Template</button>
+      </div>
+
+      <div class="preview-box" id="previewBox">
+        <div class="preview-title" id="previewTitle"></div>
+        <table class="preview-table">
+          <thead><tr><th>#</th><th>Question</th><th>A</th><th>B</th><th>C</th><th>D</th><th>✓</th></tr></thead>
+          <tbody id="previewBody"></tbody>
+        </table>
+        <div class="preview-actions">
+          <button class="btn-primary" id="btnCommit" onclick="commitQuiz()">⬆ Upload to Library</button>
+          <span style="font-size:.8rem;color:var(--muted)">This commits to GitHub and deploys live in ~30s</span>
+        </div>
+      </div>
+      <div class="msg" id="uploadMsg"></div>
+    </div>
+
+    <!-- Quiz library -->
+    <div class="admin-section">
+      <div class="admin-section-title">Quiz Library</div>
+      <div id="adminQuizList"><p class="loading">Loading…</p></div>
+    </div>
+
+    <!-- GitHub settings -->
+    <div class="admin-section">
+      <div class="admin-section-title">GitHub Settings</div>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px">These settings allow the admin panel to commit quizzes directly to your GitHub repo, triggering an automatic Vercel redeploy.</p>
+      <div class="form-group">
+        <label class="form-label">GitHub Owner (your username)</label>
+        <input class="form-input" id="ghOwner" placeholder="e.g. malliach-wq"/>
+        <div class="form-hint">Your GitHub username or organisation name</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Repository Name</label>
+        <input class="form-input" id="ghRepo" placeholder="e.g. school-questions"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Personal Access Token (PAT)</label>
+        <input class="form-input" type="password" id="ghToken" placeholder="github_pat_…"/>
+        <div class="form-hint">Token needs <strong>repo</strong> scope. Stored only in this browser.</div>
+      </div>
+      <button class="btn-primary" onclick="saveGhSettings()">Save Settings</button>
+      <div class="msg" id="ghMsg"></div>
+    </div>
+
+    <!-- Change password -->
+    <div class="admin-section">
+      <div class="admin-section-title">Change Admin Password</div>
+      <div class="form-group">
+        <label class="form-label">New Password</label>
+        <input class="form-input" type="password" id="newPass" placeholder="New password"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm New Password</label>
+        <input class="form-input" type="password" id="newPassConfirm" placeholder="Confirm"/>
+      </div>
+      <button class="btn-primary" onclick="changePass()">Update Password</button>
+      <div class="msg" id="passMsg"></div>
+    </div>
+
+    <div style="margin-top:8px">
+      <button class="btn-outline" onclick="adminLogout()">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// CONSTANTS & STATE
+// ═══════════════════════════════════════════════
+const LABELS = ['A','B','C','D'];
+const SUBJECT_ICONS = {
+  science:'🔬', maths:'🔢', math:'🔢', english:'📖',
+  history:'📜', geography:'🌍', default:'📝'
+};
+
+let quizIndex = [];      // [{id,name,subject,icon,count,builtin?}]
+let currentQuiz = null;  // full quiz data
+let currentQ = 0;
+let results = [];
+let pendingQuiz = null;  // parsed CSV, waiting to commit
+let logoClicks = 0, logoTimer = null;
+
+// ═══════════════════════════════════════════════
+// ROUTER
+// ═══════════════════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const isHome = id === 'pageHome';
+  const isQuizOrRes = id === 'pageQuiz' || id === 'pageResults';
+  const isAdmin = id === 'pageAdmin' || id === 'pageAdminLogin';
+  el('btnBack').classList.toggle('visible', isQuizOrRes);
+  el('btnAdmin').classList.toggle('visible', !isAdmin);
+  window.scrollTo(0,0);
+}
+
+function el(id) { return document.getElementById(id); }
+
+function goHome() {
+  showPage('pageHome');
+  currentQuiz = null;
+  loadHome();
+}
+
+function goAdmin() {
+  if (isLoggedIn()) { showAdminPanel(); } else { showLoginPage(); }
+}
+
+function adminLogout() {
+  sessionStorage.removeItem('sq_auth');
+  goHome();
+}
+
+// ═══════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════
+function getStoredPass() { return localStorage.getItem('sq_pass'); }
+function isLoggedIn()    { return sessionStorage.getItem('sq_auth') === '1'; }
+
+function showLoginPage() {
+  const hasPass = !!getStoredPass();
+  el('loginSub').textContent = hasPass ? 'Enter the admin password' : 'Create an admin password (first time setup)';
+  el('loginFieldLabel').textContent = hasPass ? 'Password' : 'Create Password';
+  el('loginConfirmGroup').style.display = hasPass ? 'none' : 'block';
+  el('loginInput').value = '';
+  el('loginConfirm').value = '';
+  showMsg('loginMsg','','');
+  showPage('pageAdminLogin');
+  setTimeout(() => el('loginInput').focus(), 100);
+}
+
+function doLogin() {
+  const pwd = el('loginInput').value.trim();
+  if (!pwd) { showMsg('loginMsg','Password cannot be empty','err'); return; }
+  const stored = getStoredPass();
+  if (!stored) {
+    // First time: set password
+    const confirm = el('loginConfirm').value.trim();
+    if (pwd !== confirm) { showMsg('loginMsg','Passwords do not match','err'); return; }
+    localStorage.setItem('sq_pass', btoa(pwd));
+    sessionStorage.setItem('sq_auth','1');
+    showAdminPanel();
+  } else {
+    if (btoa(pwd) !== stored) { showMsg('loginMsg','Incorrect password','err'); return; }
+    sessionStorage.setItem('sq_auth','1');
+    showAdminPanel();
+  }
+}
+
+function changePass() {
+  const np = el('newPass').value.trim(), nc = el('newPassConfirm').value.trim();
+  if (!np)       { showMsg('passMsg','Enter a new password','err'); return; }
+  if (np !== nc) { showMsg('passMsg','Passwords do not match','err'); return; }
+  localStorage.setItem('sq_pass', btoa(np));
+  showMsg('passMsg','Password updated','ok');
+  el('newPass').value = el('newPassConfirm').value = '';
+}
+
+// Logo click 5× opens admin
+el('logoBtn').addEventListener('click', () => {
+  logoClicks++;
+  clearTimeout(logoTimer);
+  logoTimer = setTimeout(() => { logoClicks = 0; }, 1500);
+  if (logoClicks >= 5) { logoClicks = 0; goAdmin(); }
+});
+
+// ═══════════════════════════════════════════════
+// QUIZ INDEX — fetch from /quizzes/index.json
+// ═══════════════════════════════════════════════
+async function fetchIndex() {
+  try {
+    const r = await fetch('/quizzes/index.json?_=' + Date.now());
+    if (!r.ok) throw new Error('not found');
+    return await r.json();
+  } catch { return []; }
+}
+
+async function loadHome() {
+  el('homeContent').innerHTML = '<p class="loading">Loading quizzes…</p>';
+  const remote = await fetchIndex();
+  quizIndex = remote.map(q => ({...q, builtin: true}));
+
+  if (!quizIndex.length) {
+    el('homeContent').innerHTML = '<p class="loading">No quizzes found. Ask an admin to upload some!</p>';
+    return;
+  }
+
+  // Group by subject
+  const groups = {};
+  quizIndex.forEach(q => {
+    if (!groups[q.subject]) groups[q.subject] = [];
+    groups[q.subject].push(q);
+  });
+
+  let html = '';
+  for (const [subj, items] of Object.entries(groups)) {
+    html += `<div class="subject-group"><div class="group-label">${subj}</div><div class="cards">`;
+    items.forEach(q => {
+      const best = getBest(q.id);
+      let badge = '';
+      if (best === q.count) badge = `<span class="card-badge badge-perfect">⭐ Perfect</span>`;
+      else if (best >= 0)   badge = `<span class="card-badge badge-done">${best}/${q.count}</span>`;
+      html += `<div class="card" onclick="startQuiz('${q.id}')">
+        ${badge}
+        <div class="card-icon">${q.icon||'📝'}</div>
+        <div class="card-name">${q.name}</div>
+        <div class="card-meta">${q.count} questions</div>
+      </div>`;
+    });
+    html += '</div></div>';
+  }
+  el('homeContent').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════
+// QUIZ ENGINE
+// ═══════════════════════════════════════════════
+async function startQuiz(id) {
+  try {
+    const r = await fetch(`/quizzes/${id}.json?_=` + Date.now());
+    if (!r.ok) throw new Error();
+    currentQuiz = await r.json();
+    currentQuiz.id = id;
+  } catch {
+    alert('Could not load quiz. Try refreshing.');
+    return;
+  }
+  currentQ = 0; results = [];
+  showPage('pageQuiz');
+  renderQ();
+}
+
+function renderQ() {
+  const q = currentQuiz.questions[currentQ];
+  const total = currentQuiz.questions.length;
+  el('quizLabel').textContent = currentQuiz.name;
+  el('quizCount').textContent = `${currentQ+1} / ${total}`;
+  el('progFill').style.width = ((currentQ/total)*100)+'%';
+  el('qNum').textContent = `Question ${currentQ+1}`;
+  el('qText').textContent = q.q;
+
+  const grid = el('answersGrid');
+  grid.innerHTML = '';
+  q.o.forEach((opt,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'ans-btn';
+    btn.innerHTML = `<span class="ans-lbl">${LABELS[i]}</span><span class="ans-txt">${opt}</span>`;
+    btn.onclick = () => pick(i);
+    grid.appendChild(btn);
+  });
+
+  el('feedback').innerHTML = '';
+  el('btnNext').classList.remove('visible');
+}
+
+function pick(idx) {
+  const q = currentQuiz.questions[currentQ];
+  const correct = q.a;
+  const right = idx === correct;
+  results.push(right);
+
+  document.querySelectorAll('.ans-btn').forEach((b,i) => {
+    b.disabled = true;
+    if (i === correct) b.classList.add('correct');
+    else if (i === idx && !right) b.classList.add('wrong');
+  });
+
+  el('feedback').innerHTML = right
+    ? '<span class="fb-icon">✅</span><span class="fb-text ok">Correct! Well done.</span>'
+    : `<span class="fb-icon">❌</span><span class="fb-text bad">Correct answer: ${q.o[correct]}</span>`;
+  el('btnNext').classList.add('visible');
+}
+
+function nextQ() {
+  currentQ++;
+  if (currentQ >= currentQuiz.questions.length) showResults();
+  else renderQ();
+}
+
+function retryTest() { startQuiz(currentQuiz.id); }
+
+// ═══════════════════════════════════════════════
+// RESULTS
+// ═══════════════════════════════════════════════
+function showResults() {
+  const score = results.filter(Boolean).length;
+  const total = currentQuiz.questions.length;
+  saveBest(currentQuiz.id, score);
+  showPage('pageResults');
+
+  const pct = Math.round((score/total)*100);
+  el('ring').style.setProperty('--pct', pct+'%');
+  el('ringNum').textContent = score;
+  el('ringDen').textContent = `out of ${total}`;
+
+  let emoji,title,sub;
+  if (score===total)  {emoji='🌟';title='Perfect Score!';sub='Outstanding — every question right!'}
+  else if(pct>=86)    {emoji='🎉';title='Excellent!';sub='Nearly perfect. Great work!'}
+  else if(pct>=66)    {emoji='👍';title='Good Job!';sub='Solid result — a bit more practice and you\'ll ace it!'}
+  else if(pct>=46)    {emoji='📚';title='Keep Practising!';sub='You\'re getting there. Review the ones you missed.'}
+  else                {emoji='💪';title='Keep Going!';sub='Science takes practice. Try again — you\'ll improve!'}
+
+  el('resEmoji').textContent = emoji;
+  el('resTitle').textContent = title;
+  el('resSub').textContent   = sub;
+
+  const best = getBest(currentQuiz.id);
+  const prevBest = parseInt(localStorage.getItem('sq_prev_'+currentQuiz.id)||'-1');
+  el('resBest').innerHTML = (score > prevBest && prevBest >= 0)
+    ? `<strong>New best score!</strong> Previous best was ${prevBest}/${total}`
+    : best > 0 ? `Your best: <strong>${best}/${total}</strong>` : '';
+  localStorage.setItem('sq_prev_'+currentQuiz.id, score);
+
+  el('breakdown').innerHTML = currentQuiz.questions.map((q,i) =>
+    `<div class="bd-row">
+      <span class="bd-q">${i+1}. ${q.q}</span>
+      <span class="bd-badge ${results[i]?'ok':'bad'}">${results[i]?'✓ Correct':'✗ Wrong'}</span>
+    </div>`).join('');
+}
+
+function getBest(id) { return parseInt(localStorage.getItem('sq_best_'+id)||'-1'); }
+function saveBest(id,score) { if(score>getBest(id)) localStorage.setItem('sq_best_'+id,score); }
+
+// ═══════════════════════════════════════════════
+// ADMIN PANEL
+// ═══════════════════════════════════════════════
+function showAdminPanel() {
+  showPage('pageAdmin');
+  loadGhSettings();
+  loadAdminQuizList();
+}
+
+function loadGhSettings() {
+  el('ghOwner').value = localStorage.getItem('sq_gh_owner')||'';
+  el('ghRepo').value  = localStorage.getItem('sq_gh_repo')||'';
+  el('ghToken').value = localStorage.getItem('sq_gh_token')||'';
+}
+
+function saveGhSettings() {
+  localStorage.setItem('sq_gh_owner', el('ghOwner').value.trim());
+  localStorage.setItem('sq_gh_repo',  el('ghRepo').value.trim());
+  localStorage.setItem('sq_gh_token', el('ghToken').value.trim());
+  showMsg('ghMsg','Settings saved','ok');
+}
+
+async function loadAdminQuizList() {
+  el('adminQuizList').innerHTML = '<p class="loading">Loading…</p>';
+  const items = await fetchIndex();
+  if (!items.length) { el('adminQuizList').innerHTML = '<p class="loading">No quizzes yet.</p>'; return; }
+
+  el('adminQuizList').innerHTML = items.map(q =>
+    `<div class="quiz-list-item">
+      <span class="qli-icon">${q.icon||'📝'}</span>
+      <div class="qli-info">
+        <div class="qli-name">${q.name}</div>
+        <div class="qli-meta">${q.subject} · ${q.count} questions</div>
+      </div>
+      <button class="btn-danger" onclick="deleteQuiz('${q.id}','${escHtml(q.name)}')">Delete</button>
+    </div>`
+  ).join('');
+}
+
+function escHtml(s) { return s.replace(/'/g,"\\'"); }
+
+// ═══════════════════════════════════════════════
+// CSV PARSING
+// ═══════════════════════════════════════════════
+function handleFile(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+
+  // Auto-fill name from filename
+  const name = file.name.replace(/\.csv$/i,'').trim();
+  if (!el('uploadName').value) el('uploadName').value = name;
+
+  // Auto-detect subject from name
+  const lower = name.toLowerCase();
+  for (const [key,icon] of Object.entries(SUBJECT_ICONS)) {
+    if (lower.includes(key) && key !== 'default') {
+      el('uploadSubject').value = key.charAt(0).toUpperCase()+key.slice(1);
+      break;
+    }
+  }
+
+  const reader = new FileReader();
+  reader.onload = e => parseCSV(e.target.result, name);
+  reader.readAsText(file);
+}
+
+function parseCSV(text, filename) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  // Skip header row if it looks like a header
+  const start = lines[0].toLowerCase().includes('question') ? 1 : 0;
+  const questions = [];
+  const errors = [];
+
+  for (let i = start; i < lines.length; i++) {
+    const cols = splitCSVRow(lines[i]);
+    if (cols.length < 6) { errors.push(`Row ${i+1}: not enough columns`); continue; }
+    const [q,a,b,c,d,ans] = cols.map(s => s.trim());
+    if (!q || !a || !b || !c || !d || !ans) { errors.push(`Row ${i+1}: empty cell`); continue; }
+    const ansIdx = ['A','B','C','D'].indexOf(ans.toUpperCase());
+    if (ansIdx === -1) { errors.push(`Row ${i+1}: correct answer must be A, B, C or D (got "${ans}")`); continue; }
+    questions.push({ q, o:[a,b,c,d], a:ansIdx });
+  }
+
+  if (errors.length) {
+    showMsg('uploadMsg', 'Errors found:<br>'+errors.join('<br>'), 'err');
+  } else {
+    showMsg('uploadMsg','','');
+  }
+
+  if (!questions.length) {
+    showMsg('uploadMsg','No valid questions found in this file','err');
+    el('previewBox').style.display = 'none';
+    return;
+  }
+
+  // Show preview
+  el('previewTitle').textContent = `Preview: ${questions.length} question${questions.length!==1?'s':''} found`;
+  el('previewBody').innerHTML = questions.slice(0,5).map((q,i) =>
+    `<tr><td>${i+1}</td><td>${q.q}</td><td>${q.o[0]}</td><td>${q.o[1]}</td><td>${q.o[2]}</td><td>${q.o[3]}</td><td>${LABELS[q.a]}</td></tr>`
+  ).join('') + (questions.length>5?`<tr><td colspan="7" style="color:var(--muted);font-style:italic">…and ${questions.length-5} more</td></tr>`:'');
+  el('previewBox').style.display = 'block';
+
+  pendingQuiz = { questions };
+
+  // Drag styling
+  const dz = el('dropzone');
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+  dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag'); if(e.dataTransfer.files[0]) { el('csvFile').files = e.dataTransfer.files; handleFile({target:{files:e.dataTransfer.files}}); } });
+}
+
+function splitCSVRow(row) {
+  const result = []; let cur = ''; let inQ = false;
+  for (let i=0; i<row.length; i++) {
+    const c = row[i];
+    if (c==='"') { inQ = !inQ; }
+    else if (c===',' && !inQ) { result.push(cur); cur=''; }
+    else { cur += c; }
+  }
+  result.push(cur);
+  return result;
+}
+
+// ═══════════════════════════════════════════════
+// GITHUB COMMIT
+// ═══════════════════════════════════════════════
+async function commitQuiz() {
+  if (!pendingQuiz) return;
+  const name    = el('uploadName').value.trim();
+  const subject = el('uploadSubject').value;
+  if (!name) { showMsg('uploadMsg','Enter a quiz name','err'); return; }
+
+  const owner = localStorage.getItem('sq_gh_owner');
+  const repo  = localStorage.getItem('sq_gh_repo');
+  const token = localStorage.getItem('sq_gh_token');
+  if (!owner||!repo||!token) {
+    showMsg('uploadMsg','Please fill in GitHub Settings below first','err');
+    el('ghOwner').scrollIntoView({behavior:'smooth'});
+    return;
+  }
+
+  el('btnCommit').disabled = true;
+  el('btnCommit').textContent = 'Uploading…';
+  showMsg('uploadMsg','Committing to GitHub…','info');
+
+  // Build quiz id from name
+  const id = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const icon = getIcon(subject);
+
+  const quizData = { name, subject, icon, questions: pendingQuiz.questions };
+  const quizPath = `quizzes/${id}.json`;
+
+  try {
+    // 1. Commit quiz JSON file
+    await ghPut(owner, repo, token, quizPath,
+      JSON.stringify(quizData, null, 2),
+      `Add quiz: ${name}`);
+
+    // 2. Fetch and update index.json
+    const idxRes = await ghGet(owner, repo, token, 'quizzes/index.json');
+    let idx = [];
+    if (idxRes.ok) {
+      const idxData = await idxRes.json();
+      idx = JSON.parse(atob(idxData.content.replace(/\n/g,'')));
+      // Remove existing entry with same id
+      idx = idx.filter(q => q.id !== id);
+    }
+    idx.push({ id, name, subject, icon, count: pendingQuiz.questions.length });
+    await ghPut(owner, repo, token, 'quizzes/index.json',
+      JSON.stringify(idx, null, 2),
+      `Update index: add ${name}`);
+
+    showMsg('uploadMsg', `✅ "${name}" uploaded! Vercel will deploy it in ~30 seconds.`, 'ok');
+    el('previewBox').style.display = 'none';
+    el('uploadName').value = '';
+    el('csvFile').value = '';
+    pendingQuiz = null;
+    setTimeout(loadAdminQuizList, 2000);
+  } catch(e) {
+    showMsg('uploadMsg', `Upload failed: ${e.message}`, 'err');
+  }
+
+  el('btnCommit').disabled = false;
+  el('btnCommit').textContent = '⬆ Upload to Library';
+}
+
+async function deleteQuiz(id, name) {
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  const owner = localStorage.getItem('sq_gh_owner');
+  const repo  = localStorage.getItem('sq_gh_repo');
+  const token = localStorage.getItem('sq_gh_token');
+  if (!owner||!repo||!token) { alert('GitHub settings not configured'); return; }
+
+  try {
+    // Delete file
+    const fileRes = await ghGet(owner, repo, token, `quizzes/${id}.json`);
+    if (fileRes.ok) {
+      const fd = await fileRes.json();
+      await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/quizzes/${id}.json`, {
+        method:'DELETE',
+        headers:ghHeaders(token),
+        body:JSON.stringify({ message:`Delete quiz: ${name}`, sha:fd.sha })
+      });
+    }
+
+    // Update index
+    const idxRes = await ghGet(owner, repo, token, 'quizzes/index.json');
+    if (idxRes.ok) {
+      const idxData = await idxRes.json();
+      let idx = JSON.parse(atob(idxData.content.replace(/\n/g,'')));
+      idx = idx.filter(q => q.id !== id);
+      await ghPut(owner, repo, token, 'quizzes/index.json',
+        JSON.stringify(idx,null,2), `Update index: remove ${name}`, idxData.sha);
+    }
+    loadAdminQuizList();
+  } catch(e) {
+    alert('Delete failed: '+e.message);
+  }
+}
+
+// GitHub API helpers
+function ghHeaders(token) {
+  return { 'Authorization':'Bearer '+token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' };
+}
+
+async function ghGet(owner, repo, token, path) {
+  return fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+    headers: ghHeaders(token)
+  });
+}
+
+async function ghPut(owner, repo, token, path, content, message, sha) {
+  const body = { message, content: btoa(unescape(encodeURIComponent(content))) };
+  if (!sha) {
+    // Try to get existing SHA
+    const r = await ghGet(owner, repo, token, path);
+    if (r.ok) { const d = await r.json(); sha = d.sha; }
+  }
+  if (sha) body.sha = sha;
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+    method:'PUT', headers:ghHeaders(token), body:JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message||res.status);
+  }
+  return res;
+}
+
+// ═══════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════
+function getIcon(subject) {
+  const key = subject.toLowerCase();
+  return SUBJECT_ICONS[key] || SUBJECT_ICONS.default;
+}
+
+function showMsg(id, text, type) {
+  const el2 = el(id);
+  el2.innerHTML = text;
+  el2.className = 'msg' + (type ? ' '+type+' visible' : '');
+}
+
+function downloadTemplate() {
+  const csv = 'Question,Option A,Option B,Option C,Option D,Correct (A/B/C/D)\n' +
+    'What is the capital of France?,Paris,London,Berlin,Madrid,A\n' +
+    'How many sides does a triangle have?,3,4,5,6,A\n';
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'quiz-template.csv';
+  a.click();
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+loadHome();
+</script>
+</body>
+</html>

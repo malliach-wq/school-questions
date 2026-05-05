@@ -1,0 +1,157 @@
+{
+  "name": "Science – Test 9",
+  "subject": "Science",
+  "icon": "🐙",
+  "questions": [
+    {
+      "q": "Why is it bad to throw plastic in the sea?",
+      "o": [
+        "It helps the fish swim",
+        "It makes the water blue",
+        "Animals can get stuck or eat it",
+        "It turns the water red"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Snails and slugs belong to which group?",
+      "o": [
+        "Vertebrates",
+        "Insects",
+        "Molluscs",
+        "Arachnids"
+      ],
+      "a": 2
+    },
+    {
+      "q": "In a food chain, a plant is called a...",
+      "o": [
+        "Prey",
+        "Producer",
+        "Consumer",
+        "Predator"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Which group has dry scales and lays eggs?",
+      "o": [
+        "Mammals",
+        "Fish",
+        "Reptiles",
+        "Amphibians"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Why was Ricky's classification key better than Uman's?",
+      "o": [
+        "He had better drawings",
+        "He used shorter questions",
+        "He used more animals",
+        "He used specific questions"
+      ],
+      "a": 3
+    },
+    {
+      "q": "What provides energy to almost all food chains?",
+      "o": [
+        "The Moon",
+        "The Wind",
+        "The Sun",
+        "The Ocean"
+      ],
+      "a": 2
+    },
+    {
+      "q": "If a key asks 'Does it have a trunk?', which plant are you likely identifying?",
+      "o": [
+        "Ghaf Tree",
+        "Saltbush",
+        "Grass",
+        "Flower"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Which group of invertebrates has 8 legs?",
+      "o": [
+        "Arachnids",
+        "Crustaceans",
+        "Insects",
+        "Molluscs"
+      ],
+      "a": 0
+    },
+    {
+      "q": "A change to a habitat caused by humans is...",
+      "o": [
+        "A seasonal change",
+        "A volcanic eruption",
+        "A natural flood",
+        "Building a road"
+      ],
+      "a": 3
+    },
+    {
+      "q": "Amphibians are unique because they...",
+      "o": [
+        "Have feathers",
+        "Live in water and on land",
+        "Are warm-blooded",
+        "Have a hard shell"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Which group of vertebrates has fur and gives birth to live young?",
+      "o": [
+        "Reptiles",
+        "Birds",
+        "Mammals",
+        "Amphibians"
+      ],
+      "a": 2
+    },
+    {
+      "q": "How do fish get oxygen underwater?",
+      "o": [
+        "Using gills",
+        "Through their tail",
+        "Using lungs",
+        "By holding their breath"
+      ],
+      "a": 0
+    },
+    {
+      "q": "What is 'Conservation'?",
+      "o": [
+        "Hunting animals",
+        "Cutting down trees",
+        "Wasting water",
+        "Protecting nature"
+      ],
+      "a": 3
+    },
+    {
+      "q": "What is 'Deforestation'?",
+      "o": [
+        "Cutting down forests",
+        "A desert storm",
+        "Planting new seeds",
+        "A type of animal"
+      ],
+      "a": 0
+    },
+    {
+      "q": "The animal that is hunted and eaten is the...",
+      "o": [
+        "Prey",
+        "Predator",
+        "Sun",
+        "Producer"
+      ],
+      "a": 0
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "name": "Science – Test 3",
+  "subject": "Science",
+  "icon": "🐦",
+  "questions": [
+    {
+      "q": "Which of these is a 'warm-blooded' animal?",
+      "o": [
+        "Frog (Amphibian)",
+        "Shark (Fish)",
+        "Eagle (Bird)",
+        "Snake (Reptile)"
+      ],
+      "a": 2
+    },
+    {
+      "q": "If a key asks 'Does it have a trunk?', which plant are you likely identifying?",
+      "o": [
+        "Flower",
+        "Grass",
+        "Saltbush",
+        "Ghaf Tree"
+      ],
+      "a": 3
+    },
+    {
+      "q": "Look at: Grass → Rabbit → Fox. What is the rabbit?",
+      "o": [
+        "The sun",
+        "A consumer",
+        "A producer",
+        "An inanimate object"
+      ],
+      "a": 1
+    },
+    {
+      "q": "How many legs does a beetle (insect) have?",
+      "o": [
+        "8",
+        "10",
+        "2",
+        "6"
+      ],
+      "a": 3
+    },
+    {
+      "q": "An animal that hunts and eats others is a...",
+      "o": [
+        "Prey",
+        "Predator",
+        "Producer",
+        "Plant"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Which group of invertebrates has 8 legs?",
+      "o": [
+        "Molluscs",
+        "Crustaceans",
+        "Arachnids",
+        "Insects"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which of these has an exoskeleton?",
+      "o": [
+        "Human",
+        "Dog",
+        "Fish",
+        "Ant"
+      ],
+      "a": 3
+    },
+    {
+      "q": "Snails and slugs belong to which group?",
+      "o": [
+        "Vertebrates",
+        "Arachnids",
+        "Insects",
+        "Molluscs"
+      ],
+      "a": 3
+    },
+    {
+      "q": "What is 'Conservation'?",
+      "o": [
+        "Wasting water",
+        "Protecting nature",
+        "Hunting animals",
+        "Cutting down trees"
+      ],
+      "a": 1
+    },
+    {
+      "q": "In a food chain, a plant is called a...",
+      "o": [
+        "Producer",
+        "Prey",
+        "Consumer",
+        "Predator"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Why is it bad to throw plastic in the sea?",
+      "o": [
+        "Animals can get stuck or eat it",
+        "It makes the water blue",
+        "It turns the water red",
+        "It helps the fish swim"
+      ],
+      "a": 0
+    },
+    {
+      "q": "When using a key, what kind of answers do you usually give?",
+      "o": [
+        "Maybe",
+        "Sometimes",
+        "Often",
+        "Yes or No"
+      ],
+      "a": 3
+    },
+    {
+      "q": "Humans belong to which group?",
+      "o": [
+        "Invertebrates",
+        "Mammals",
+        "Birds",
+        "Reptiles"
+      ],
+      "a": 1
+    },
+    {
+      "q": "What does it mean if an animal is 'Extinct'?",
+      "o": [
+        "They are sleeping",
+        "They are rare",
+        "None are left alive",
+        "They changed color"
+      ],
+      "a": 2
+    },
+    {
+      "q": "What is the goal of a classification key?",
+      "o": [
+        "To count animals",
+        "To see which is fastest",
+        "To identify a living thing",
+        "To name all plants"
+      ],
+      "a": 2
+    }
+  ]
+}

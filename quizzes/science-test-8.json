@@ -1,0 +1,157 @@
+{
+  "name": "Science – Test 8",
+  "subject": "Science",
+  "icon": "🦋",
+  "questions": [
+    {
+      "q": "When using a key, what kind of answers do you usually give?",
+      "o": [
+        "Often",
+        "Yes or No",
+        "Sometimes",
+        "Maybe"
+      ],
+      "a": 1
+    },
+    {
+      "q": "An 'Endangered' animal is...",
+      "o": [
+        "Commonly found",
+        "Already extinct",
+        "At risk of disappearing",
+        "Very dangerous"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Which of these is a 'warm-blooded' animal?",
+      "o": [
+        "Eagle (Bird)",
+        "Snake (Reptile)",
+        "Frog (Amphibian)",
+        "Shark (Fish)"
+      ],
+      "a": 0
+    },
+    {
+      "q": "An animal that hunts and eats others is a...",
+      "o": [
+        "Prey",
+        "Producer",
+        "Predator",
+        "Plant"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Amphibians are unique because they...",
+      "o": [
+        "Have a hard shell",
+        "Have feathers",
+        "Are warm-blooded",
+        "Live in water and on land"
+      ],
+      "a": 3
+    },
+    {
+      "q": "What is 'Deforestation'?",
+      "o": [
+        "Planting new seeds",
+        "A desert storm",
+        "Cutting down forests",
+        "A type of animal"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Humans belong to which group?",
+      "o": [
+        "Reptiles",
+        "Invertebrates",
+        "Mammals",
+        "Birds"
+      ],
+      "a": 2
+    },
+    {
+      "q": "In a food chain, a plant is called a...",
+      "o": [
+        "Predator",
+        "Producer",
+        "Prey",
+        "Consumer"
+      ],
+      "a": 1
+    },
+    {
+      "q": "What do all vertebrates have in common?",
+      "o": [
+        "Gills",
+        "A backbone",
+        "6 legs",
+        "Feathers"
+      ],
+      "a": 1
+    },
+    {
+      "q": "How many legs does a beetle (insect) have?",
+      "o": [
+        "6",
+        "8",
+        "10",
+        "2"
+      ],
+      "a": 0
+    },
+    {
+      "q": "What is 'Conservation'?",
+      "o": [
+        "Protecting nature",
+        "Wasting water",
+        "Cutting down trees",
+        "Hunting animals"
+      ],
+      "a": 0
+    },
+    {
+      "q": "Why is it bad to throw plastic in the sea?",
+      "o": [
+        "It helps the fish swim",
+        "Animals can get stuck or eat it",
+        "It turns the water red",
+        "It makes the water blue"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Spiders are NOT insects because they have...",
+      "o": [
+        "Antennae",
+        "8 legs",
+        "Wings",
+        "6 legs"
+      ],
+      "a": 1
+    },
+    {
+      "q": "Which question is most specific for identifying a bird?",
+      "o": [
+        "Does it eat food?",
+        "Can it move?",
+        "Does it have feathers?",
+        "Is it an animal?"
+      ],
+      "a": 2
+    },
+    {
+      "q": "Why was Ricky's classification key better than Uman's?",
+      "o": [
+        "He used shorter questions",
+        "He had better drawings",
+        "He used more animals",
+        "He used specific questions"
+      ],
+      "a": 3
+    }
+  ]
+}
